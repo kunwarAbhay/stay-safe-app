@@ -5,6 +5,7 @@ import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { SafetyModeWidget } from "@/src/features/home/components/safety-mode-widget";
+import { NoActiveAlertInfoCard } from "@/src/features/home/components/no-active-alert-info-card";
 
 export default function Home() {
   return (
@@ -28,6 +29,8 @@ export default function Home() {
         <SafetyModeWidget />
 
         <PeopleSharingWidget />
+
+        <NoActiveAlertInfoCard />
       </VStack>
     </ScrollView>
   );
