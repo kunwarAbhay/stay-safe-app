@@ -6,13 +6,11 @@ import { Heading } from '@/components/ui/heading';
 import { HelplineWidget } from '@/src/features/helpline/components/helpline-widget';
 import { EmergencyCallInfo } from '@/src/features/helpline/components/emergency-call-info';
 
-
-
 export default function Helpline() {
   return (
     <ScrollView
       className="flex-1 bg-background"
-      contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 24 }}
+      contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: 100 }}
     >
       <VStack space="xl" className="w-full">
         {/* Header */}
