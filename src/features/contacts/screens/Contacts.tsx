@@ -1,4 +1,4 @@
-import { ScrollView } from "@/components/ui/scroll-view";
+import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 import { ContactList } from "@/src/features/contacts/components/contact-list";
 import {
   Contact,
@@ -40,15 +40,8 @@ const INITIAL_CONTACTS: Contact[] = [
 
 export default function Contacts() {
   return (
-    <ScrollView
-      className="flex-1 bg-background"
-      contentContainerStyle={{
-        paddingHorizontal: 20,
-        paddingVertical: 24,
-        paddingBottom: 100,
-      }}
-    >
+    <ScreenLayout isTabScreen>
       <ContactList contacts={INITIAL_CONTACTS} />
-    </ScrollView>
+    </ScreenLayout>
   );
 }
