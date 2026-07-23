@@ -1,4 +1,10 @@
+import { useState, useMemo, useCallback } from "react";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
+import { HStack } from "@/components/ui/hstack";
+import { VStack } from "@/components/ui/vstack";
+import { ContactSearchInput } from "@/src/features/contacts/components/contact-search-input";
+import { FilterToggleButton } from "@/src/features/contacts/components/filter-toggle-button";
+import { SelectedFilterChips } from "@/src/features/contacts/components/selected-filter-chips";
 import { ContactList } from "@/src/features/contacts/components/contact-list";
 import {
   Contact,
@@ -6,6 +12,10 @@ import {
   ContactPermission,
   Relationship,
 } from "@/src/features/contacts/types/contact";
+import { ContactFilterOption } from "@/src/features/contacts/types/contact-filter";
+import { CONTACT_FILTERS } from "@/src/features/contacts/constants/contact-filters";
+import { filterContacts } from "@/src/features/contacts/utils/filter-contacts";
+
 
 const INITIAL_CONTACTS: Contact[] = [
   {
@@ -38,10 +48,50 @@ const INITIAL_CONTACTS: Contact[] = [
   },
 ];
 
+const DEFAULT_FILTERS: ContactFilterOption[] = [
+  CONTACT_FILTERS.SOS,
+  CONTACT_FILTERS.STAY_WITH_ME,
+];
+
 export default function Contacts() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilters, setSelectedFilters] =
+    useState<ContactFilterOption[]>(DEFAULT_FILTERS);
+
+  const handleRemoveFilter = useCallback((filterId: string) => {
+    setSelectedFilters((prev) => prev.filter((f) => f.id !== filterId));
+  }, []);
+
+  const handleToggleFilter = useCallback(() => {
+    // Modal implementation intentionally omitted as per requirement
+  }, []);
+
+  const filteredContacts = useMemo(() => {
+    return filterContacts(INITIAL_CONTACTS, searchQuery, selectedFilters);
+  }, [searchQuery, selectedFilters]);
+
   return (
     <ScreenLayout isTabScreen>
-      <ContactList contacts={INITIAL_CONTACTS} />
+      <VStack space="sm" className="w-full mb-4">
+        <HStack className="w-full items-center gap-3">
+          <ContactSearchInput
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <FilterToggleButton
+            onPress={handleToggleFilter}
+            isActive={selectedFilters.length > 0}
+          />
+        </HStack>
+
+        <SelectedFilterChips
+          filters={selectedFilters}
+          onRemoveFilter={handleRemoveFilter}
+        />
+      </VStack>
+
+      <ContactList contacts={filteredContacts} />
     </ScreenLayout>
   );
 }
+
