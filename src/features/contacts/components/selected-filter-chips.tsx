@@ -1,18 +1,16 @@
 import React from "react";
 import { ScrollView } from "react-native";
 import { Chip, ChipText } from "@/src/shared/components/chip";
+import { FilterOption } from "@/src/features/contacts/types/contact-filter";
 import { cn } from "@gluestack-ui/utils/nativewind-utils";
 
-export interface FilterOption {
-  id: string;
-  label: string;
-}
+export type { FilterOption };
 
 export interface SelectedFilterChipsProps {
   /** Active filter items to display */
   filters?: FilterOption[];
   /** Callback when a chip's close button is pressed */
-  onRemoveFilter?: (filterId: string) => void;
+  onRemoveFilter?: (filter: FilterOption) => void;
 }
 
 export const SelectedFilterChips = React.memo(({
@@ -35,7 +33,7 @@ export const SelectedFilterChips = React.memo(({
         <Chip
           key={filter.id}
           isSelected
-          onPress={() => onRemoveFilter?.(filter.id)}
+          onPress={() => onRemoveFilter?.(filter)}
           accessibilityLabel={`Remove ${filter.label} filter`}
         >
           <ChipText className="font-medium text-sm text-primary-foreground">

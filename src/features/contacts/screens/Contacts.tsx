@@ -1,7 +1,8 @@
-import { useState, useMemo, useCallback } from "react";
+import { useCallback } from "react";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
+import { ContactGroupTabs } from "@/src/features/contacts/components/contact-group-tabs";
 import { ContactSearchInput } from "@/src/features/contacts/components/contact-search-input";
 import { FilterToggleButton } from "@/src/features/contacts/components/filter-toggle-button";
 import { SelectedFilterChips } from "@/src/features/contacts/components/selected-filter-chips";
@@ -14,8 +15,7 @@ import {
 } from "@/src/features/contacts/types/contact";
 import { ContactFilterOption } from "@/src/features/contacts/types/contact-filter";
 import { CONTACT_FILTERS } from "@/src/features/contacts/constants/contact-filters";
-import { filterContacts } from "@/src/features/contacts/utils/filter-contacts";
-
+import { useContactFilters } from "@/src/features/contacts/hooks/use-contact-filters";
 
 const INITIAL_CONTACTS: Contact[] = [
   {
@@ -38,7 +38,7 @@ const INITIAL_CONTACTS: Contact[] = [
     mobileCountryCode: "1",
     mobileNumberValue: "5552849172",
     relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
+    contactGroup: ContactGroup.NEARBY_HELPERS,
     sosPermission: ContactPermission.ALLOWED,
     stayWithMePermission: ContactPermission.ALLOWED,
     avatar:
@@ -49,26 +49,29 @@ const INITIAL_CONTACTS: Contact[] = [
 ];
 
 const DEFAULT_FILTERS: ContactFilterOption[] = [
+  CONTACT_FILTERS.INNER_CIRCLE,
   CONTACT_FILTERS.SOS,
   CONTACT_FILTERS.STAY_WITH_ME,
 ];
 
 export default function Contacts() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] =
-    useState<ContactFilterOption[]>(DEFAULT_FILTERS);
-
-  const handleRemoveFilter = useCallback((filterId: string) => {
-    setSelectedFilters((prev) => prev.filter((f) => f.id !== filterId));
-  }, []);
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedFilters,
+    activeContactGroup,
+    chipFilters,
+    filteredContacts,
+    handleRemoveFilter,
+    handleContactGroupTabChange,
+  } = useContactFilters({
+    initialContacts: INITIAL_CONTACTS,
+    initialFilters: DEFAULT_FILTERS,
+  });
 
   const handleToggleFilter = useCallback(() => {
     // Modal implementation intentionally omitted as per requirement
   }, []);
-
-  const filteredContacts = useMemo(() => {
-    return filterContacts(INITIAL_CONTACTS, searchQuery, selectedFilters);
-  }, [searchQuery, selectedFilters]);
 
   return (
     <ScreenLayout isTabScreen>
@@ -85,8 +88,13 @@ export default function Contacts() {
         </HStack>
 
         <SelectedFilterChips
-          filters={selectedFilters}
+          filters={chipFilters}
           onRemoveFilter={handleRemoveFilter}
+        />
+
+        <ContactGroupTabs
+          activeContactGroup={activeContactGroup}
+          onContactGroupChange={handleContactGroupTabChange}
         />
       </VStack>
 
@@ -94,4 +102,3 @@ export default function Contacts() {
     </ScreenLayout>
   );
 }
-

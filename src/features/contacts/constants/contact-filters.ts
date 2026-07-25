@@ -30,13 +30,13 @@ export const CONTACT_FILTERS = {
   // --- Permission Filters ---
   SOS: createContactFilter(
     "permission_sos",
-    "permission",
+    ContactFilterCategory.Permission,
     "SOS",
     (contact) => contact.sosPermission === ContactPermission.ALLOWED,
   ),
   STAY_WITH_ME: createContactFilter(
     "permission_stay_with_me",
-    "permission",
+    ContactFilterCategory.Permission,
     "Stay with Me",
     (contact) => contact.stayWithMePermission === ContactPermission.ALLOWED,
   ),
@@ -44,13 +44,13 @@ export const CONTACT_FILTERS = {
   // --- Group Filters ---
   INNER_CIRCLE: createContactFilter(
     "group_inner_circle",
-    "contactGroup",
+    ContactFilterCategory.ContactGroup,
     "Inner Circle",
     (contact) => contact.contactGroup === ContactGroup.INNER_CIRCLE,
   ),
   NEARBY_HELPERS: createContactFilter(
     "group_nearby_helpers",
-    "contactGroup",
+    ContactFilterCategory.ContactGroup,
     "Nearby Helpers",
     (contact) => contact.contactGroup === ContactGroup.NEARBY_HELPERS,
   ),
@@ -58,49 +58,49 @@ export const CONTACT_FILTERS = {
   // --- Relationship Filters ---
   FAMILY: createContactFilter(
     "relationship_family",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Family",
     (contact) => contact.relationship === Relationship.FAMILY,
   ),
   FRIEND: createContactFilter(
     "relationship_friend",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Friend",
     (contact) => contact.relationship === Relationship.FRIEND,
   ),
   CLOSE_FRIEND: createContactFilter(
     "relationship_close_friend",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Close Friend",
     (contact) => contact.relationship === Relationship.CLOSE_FRIEND,
   ),
   PARTNER: createContactFilter(
     "relationship_partner",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Partner",
     (contact) => contact.relationship === Relationship.PARTNER,
   ),
   COLLEAGUE: createContactFilter(
     "relationship_colleague",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Colleague",
     (contact) => contact.relationship === Relationship.COLLEAGUE,
   ),
   CLASSMATE: createContactFilter(
     "relationship_classmate",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Classmate",
     (contact) => contact.relationship === Relationship.CLASSMATE,
   ),
   NEIGHBOR: createContactFilter(
     "relationship_neighbor",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Neighbor",
     (contact) => contact.relationship === Relationship.NEIGHBOR,
   ),
   OTHER: createContactFilter(
     "relationship_other",
-    "relationship",
+    ContactFilterCategory.Relationship,
     "Other",
     (contact) => contact.relationship === Relationship.OTHER,
   ),

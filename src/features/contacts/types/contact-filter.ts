@@ -1,15 +1,18 @@
-import { Contact } from "./contact";
+import { Contact } from "@/src/features/contacts/types/contact";
 
-export type ContactFilterCategory =
-  | "permission"
-  | "contactGroup"
-  | "relationship"
-  | (string & {});
+export enum ContactFilterCategory {
+  Permission = "Permission",
+  ContactGroup = "ContactGroup",
+  Relationship = "Relationship",
+}
 
-export interface ContactFilterOption {
+export interface FilterOption {
   id: string;
-  category: ContactFilterCategory;
   label: string;
+}
+
+export interface ContactFilterOption extends FilterOption {
+  category: ContactFilterCategory;
   matches: (contact: Contact) => boolean;
 }
 

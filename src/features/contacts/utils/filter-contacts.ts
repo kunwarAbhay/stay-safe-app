@@ -1,74 +1,145 @@
 import { Contact } from "@/src/features/contacts/types/contact";
 import {
+  ContactFilterCategory,
   ContactFilterOption,
   ContactFiltersByCategory,
+  FilterOption,
 } from "@/src/features/contacts/types/contact-filter";
 
 /**
- * Evaluates whether a contact matches the search query (name or phone number).
+ * Filter Decorator type.
+ * Takes an array of contacts and returns a decorated/filtered array of contacts.
  */
-const matchesSearchQuery = (contact: Contact, searchQuery: string): boolean => {
+export type ContactFilterDecorator = (contacts: Contact[]) => Contact[];
+
+/**
+ * Decorator Composer / Pipeline.
+ * Chains multiple filter decorators together sequentially.
+ */
+export const composeContactFilters = (
+  ...decorators: (ContactFilterDecorator | undefined | null | false)[]
+): ContactFilterDecorator => {
+  const activeDecorators = decorators.filter(
+    (d): d is ContactFilterDecorator => typeof d === "function",
+  );
+
+  return (contacts: Contact[]) =>
+    activeDecorators.reduce(
+      (currentContacts, decorator) => decorator(currentContacts),
+      contacts,
+    );
+};
+
+/**
+ * Decorator Factory: Filters contacts by search query (name or phone number).
+ */
+export const createSearchFilterDecorator = (
+  searchQuery: string,
+): ContactFilterDecorator => {
   const normalizedQuery = searchQuery.trim().toLowerCase();
 
-  if (!normalizedQuery) return true;
-  const matchesName = contact.name.toLowerCase().includes(normalizedQuery);
-  const matchesPhone = contact.mobileNumberValue.includes(normalizedQuery);
-  return matchesName || matchesPhone;
+  return (contacts: Contact[]) => {
+    if (!normalizedQuery) return contacts;
+    return contacts.filter((contact) => {
+      const matchesName = contact.name.toLowerCase().includes(normalizedQuery);
+      const matchesPhone = contact.mobileNumberValue.includes(normalizedQuery);
+      return matchesName || matchesPhone;
+    });
+  };
 };
 
 /**
- * Groups active filter options by their category key.
+ * Decorator Factory: Filters contacts by active category filter options.
+ * - OR matching within the same category
+ * - AND matching across different categories
  */
-const groupFiltersByCategory = (
+export const createCategoryFilterDecorator = (
   selectedFilters: ContactFilterOption[],
-): ContactFiltersByCategory => {
-  return selectedFilters.reduce<ContactFiltersByCategory>((acc, filter) => {
-    acc[filter.category] = acc[filter.category] || [];
-    acc[filter.category].push(filter);
-    return acc;
-  }, {});
-};
+): ContactFilterDecorator => {
+  if (!selectedFilters || selectedFilters.length === 0) {
+    return (contacts: Contact[]) => contacts;
+  }
 
-/**
- * Checks if a contact satisfies at least one filter within a given category (OR logic).
- */
-const matchesCategoryFilters = (
-  contact: Contact,
-  categoryFilters: ContactFilterOption[],
-): boolean => {
-  return categoryFilters.some((filter) => filter.matches(contact));
-};
-
-/**
- * Checks if a contact satisfies all active filter categories (AND logic across categories).
- */
-const matchesAllFilterCategories = (
-  contact: Contact,
-  filtersByCategory: ContactFiltersByCategory,
-): boolean => {
-  return Object.values(filtersByCategory).every((categoryFilters) =>
-    matchesCategoryFilters(contact, categoryFilters),
+  const filtersByCategory = selectedFilters.reduce<ContactFiltersByCategory>(
+    (acc, filter) => {
+      acc[filter.category] = acc[filter.category] || [];
+      acc[filter.category].push(filter);
+      return acc;
+    },
+    {},
   );
+
+  const activeCategories = Object.keys(filtersByCategory);
+
+  return (contacts: Contact[]) =>
+    contacts.filter((contact) =>
+      activeCategories.every((category) => {
+        const categoryFilters = filtersByCategory[category];
+        return categoryFilters.some((filter) => filter.matches(contact));
+      }),
+    );
 };
 
 /**
- * Filter contacts by search query and active filter options.
- *
- * Rules:
- * - Search query matches name or phone number.
- * - Filters in different categories are combined with AND.
- * - Filters in the same category are combined with OR.
+ * Custom Predicate Decorator Factory.
+ * Wraps any boolean predicate function into a filter decorator.
+ */
+export const createPredicateFilterDecorator = (
+  predicate: (contact: Contact) => boolean,
+): ContactFilterDecorator => {
+  return (contacts: Contact[]) => contacts.filter(predicate);
+};
+
+/**
+ * Convenience evaluator using the Decorator Pattern to filter contacts.
  */
 export const filterContacts = (
   contacts: Contact[],
   searchQuery: string,
   selectedFilters: ContactFilterOption[],
 ): Contact[] => {
-  const filtersByCategory = groupFiltersByCategory(selectedFilters);
+  const searchDecorator = createSearchFilterDecorator(searchQuery);
+  const categoryDecorator = createCategoryFilterDecorator(selectedFilters);
 
-  return contacts.filter(
-    (contact) =>
-      matchesSearchQuery(contact, searchQuery) &&
-      matchesAllFilterCategories(contact, filtersByCategory),
-  );
+  return composeContactFilters(searchDecorator, categoryDecorator)(contacts);
+};
+
+// --- Pure Filter State Helpers ---
+
+export const addFilter = (
+  filters: ContactFilterOption[],
+  newFilter: ContactFilterOption,
+): ContactFilterOption[] => {
+  if (filters.some((f) => f.id === newFilter.id)) return filters;
+  return [...filters, newFilter];
+};
+
+/**
+ * Immutably removes a filter option by filter object or ID.
+ */
+export const removeFilter = (
+  filters: ContactFilterOption[],
+  targetFilter: FilterOption,
+): ContactFilterOption[] => {
+  return filters.filter((f) => f.id !== targetFilter.id);
+};
+
+/**
+ * Immutably excludes all filters belonging to a specific category.
+ */
+export const excludeCategoryFilters = (
+  filters: ContactFilterOption[],
+  categoryToExclude: ContactFilterCategory,
+): ContactFilterOption[] => {
+  return filters.filter((f) => f.category !== categoryToExclude);
+};
+
+/**
+ * Retrieves all active filters belonging to a specific category.
+ */
+export const getCategoryFilters = (
+  filters: ContactFilterOption[],
+  category: ContactFilterCategory,
+): ContactFilterOption[] => {
+  return filters.filter((f) => f.category === category);
 };
