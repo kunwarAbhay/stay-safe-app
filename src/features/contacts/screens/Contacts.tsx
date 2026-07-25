@@ -16,6 +16,7 @@ import {
 import { ContactFilterOption } from "@/src/features/contacts/types/contact-filter";
 import { CONTACT_FILTERS } from "@/src/features/contacts/constants/contact-filters";
 import { useContactFilters } from "@/src/features/contacts/hooks/use-contact-filters";
+import { ContactHeader } from "@/src/features/contacts/components/contact-header";
 
 const INITIAL_CONTACTS: Contact[] = [
   {
@@ -75,30 +76,34 @@ export default function Contacts() {
 
   return (
     <ScreenLayout isTabScreen>
-      <VStack space="sm" className="w-full mb-4">
-        <HStack className="w-full items-center gap-3">
-          <ContactSearchInput
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          <FilterToggleButton
-            onPress={handleToggleFilter}
-            isActive={selectedFilters.length > 0}
-          />
-        </HStack>
+      <VStack space="xl">
+        <ContactHeader />
 
-        <SelectedFilterChips
-          filters={chipFilters}
-          onRemoveFilter={handleRemoveFilter}
-        />
+        <VStack space="sm" className="w-full mb-4">
+          <HStack className="w-full items-center gap-3">
+            <ContactSearchInput
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+            <FilterToggleButton
+              onPress={handleToggleFilter}
+              isActive={selectedFilters.length > 0}
+            />
+          </HStack>
 
-        <ContactGroupTabs
-          activeContactGroup={activeContactGroup}
-          onContactGroupChange={handleContactGroupTabChange}
-        />
+          <SelectedFilterChips
+            filters={chipFilters}
+            onRemoveFilter={handleRemoveFilter}
+          />
+
+          <ContactGroupTabs
+            activeContactGroup={activeContactGroup}
+            onContactGroupChange={handleContactGroupTabChange}
+          />
+        </VStack>
+        
+        <ContactList contacts={filteredContacts} />
       </VStack>
-
-      <ContactList contacts={filteredContacts} />
     </ScreenLayout>
   );
 }
