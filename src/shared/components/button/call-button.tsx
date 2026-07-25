@@ -23,7 +23,7 @@ export const CallButton = ({
   return (
     <Pressable
       className={cn(
-        "p-3.25 bg-foreground rounded-full items-center justify-center active:scale-95 transition-transform duration-100 shadow-sm",
+        "p-3.25 bg-foreground rounded-full items-center justify-center transition-transform duration-100 shadow-sm",
         className,
       )}
       onPress={handleCallPress}
