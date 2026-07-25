@@ -3,6 +3,7 @@ import { View, ViewProps } from 'react-native';
 import { OverlayProvider } from '@gluestack-ui/core/overlay/creator';
 import { ToastProvider } from '@gluestack-ui/core/toast/creator';
 import { Appearance, ColorSchemeName } from "react-native";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export type ModeType = 'light' | 'dark' | 'system';
 
@@ -19,15 +20,18 @@ export function GluestackUIProvider({
   }, [mode]);
 
   return (
-    <View
-      style={[
-        { flex: 1, height: '100%', width: '100%' },
-        props.style,
-      ]}
-    >
-      <OverlayProvider>
-        <ToastProvider>{props.children}</ToastProvider>
-      </OverlayProvider>
-    </View>
+    <SafeAreaProvider style={{ flex: 1 }}>
+      <View
+        style={[
+          { flex: 1, height: '100%', width: '100%' },
+          props.style,
+        ]}
+      >
+        <OverlayProvider>
+          <ToastProvider>{props.children}</ToastProvider>
+        </OverlayProvider>
+      </View>
+    </SafeAreaProvider>
   );
 }
+
