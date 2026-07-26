@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { Tabs } from "expo-router";
 import { View, Platform, Pressable, StyleSheet } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
@@ -10,6 +10,32 @@ import {
   LucideIcon,
 } from "lucide-react-native";
 
+// ---------------------------------------------------------------------------
+// Design tokens — single source of truth for the tab bar's visual language.
+// ---------------------------------------------------------------------------
+const COLORS = {
+  barBackground: "#16151A",
+  barBorder: "rgba(255, 255, 255, 0.08)",
+  activeBackground: "#FFFFFF",
+  activeIcon: "#16151A",
+  inactiveIcon: "#9E9CA5",
+} as const;
+
+const LAYOUT = {
+  barHeight: 66,
+  barRadius: 38,
+  barHorizontalInset: 16,
+  activeIconSize: 48,
+  activeIconRadius: 24,
+  iconSize: 22,
+  webBottomMargin: 20,
+  nativeBottomInsetPadding: 8,
+  nativeMinBottomMargin: 16,
+} as const;
+
+// ---------------------------------------------------------------------------
+// Tab configuration — data, not JSX. Adding a tab means editing only this.
+// ---------------------------------------------------------------------------
 interface TabItemConfig {
   name: string;
   title: string;
@@ -18,63 +44,113 @@ interface TabItemConfig {
 }
 
 const TAB_ITEMS: readonly TabItemConfig[] = [
-  {
-    name: "index",
-    title: "Home",
-    Icon: Home,
-    fillActive: true,
-  },
-  {
-    name: "tracker",
-    title: "Tracker",
-    Icon: MapPin,
-  },
-  {
-    name: "contacts",
-    title: "Contacts",
-    Icon: UserCheck,
-  },
-  {
-    name: "helpline",
-    title: "Helpline",
-    Icon: PhoneCall,
-  },
+  { name: "index", title: "Home", Icon: Home, fillActive: true },
+  { name: "tracker", title: "Tracker", Icon: MapPin },
+  { name: "contacts", title: "Contacts", Icon: UserCheck },
+  { name: "helpline", title: "Helpline", Icon: PhoneCall },
 ];
 
+// ---------------------------------------------------------------------------
+// TabIcon — the only place that knows how focused/unfocused icons look.
+// ---------------------------------------------------------------------------
 interface TabIconProps {
   Icon: LucideIcon;
   focused: boolean;
   fillActive?: boolean;
 }
 
-const TabIcon = memo(({ Icon, focused, fillActive }: TabIconProps) => {
-  if (focused) {
-    return (
-      <View style={styles.activeIconContainer}>
-        <Icon
-          size={22}
-          color="#16151A"
-          fill={fillActive ? "#16151A" : "none"}
-        />
-      </View>
-    );
-  }
+const TabIcon = memo(({ Icon, focused, fillActive }: TabIconProps) => (
+  <View
+    style={focused ? styles.activeIconContainer : styles.inactiveIconContainer}
+  >
+    <Icon
+      size={LAYOUT.iconSize}
+      color={focused ? COLORS.activeIcon : COLORS.inactiveIcon}
+      fill={focused && fillActive ? COLORS.activeIcon : "none"}
+    />
+  </View>
+));
+TabIcon.displayName = "TabIcon";
 
-  return (
-    <View style={styles.inactiveIconContainer}>
-      <Icon size={22} color="#9E9CA5" />
-    </View>
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+function getBottomMargin(safeAreaBottom: number): number {
+  if (Platform.OS === "web") return LAYOUT.webBottomMargin;
+  return Math.max(
+    safeAreaBottom + LAYOUT.nativeBottomInsetPadding,
+    LAYOUT.nativeMinBottomMargin,
   );
-});
+}
 
+// ---------------------------------------------------------------------------
+// TabBarButton — extracted so each button's press handlers aren't redefined
+// inline inside the parent's map callback (clarity, not a perf necessity here).
+// ---------------------------------------------------------------------------
+interface TabBarButtonProps {
+  isFocused: boolean;
+  label?: string;
+  testID?: string;
+  onPress: () => void;
+  onLongPress: () => void;
+  renderIcon: (focused: boolean) => React.ReactNode;
+}
+
+const TabBarButton = memo(
+  ({
+    isFocused,
+    label,
+    testID,
+    onPress,
+    onLongPress,
+    renderIcon,
+  }: TabBarButtonProps) => (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={isFocused ? { selected: true } : {}}
+      accessibilityLabel={label}
+      testID={testID}
+      onPress={onPress}
+      onLongPress={onLongPress}
+      style={styles.tabPressable}
+    >
+      {renderIcon(isFocused)}
+    </Pressable>
+  ),
+);
+TabBarButton.displayName = "TabBarButton";
+
+// ---------------------------------------------------------------------------
+// CustomTabBar
+// ---------------------------------------------------------------------------
 function CustomTabBar({
   state,
   descriptors,
   navigation,
   insets,
 }: BottomTabBarProps) {
-  const bottomMargin =
-    Platform.OS === "web" ? 20 : Math.max(insets.bottom + 8, 16);
+  const bottomMargin = getBottomMargin(insets.bottom);
+
+  const handlePress = useCallback(
+    (routeKey: string, routeName: string, isFocused: boolean) => {
+      const event = navigation.emit({
+        type: "tabPress",
+        target: routeKey,
+        canPreventDefault: true,
+      });
+      if (!isFocused && !event.defaultPrevented) {
+        navigation.navigate(routeName);
+      }
+    },
+    [navigation],
+  );
+
+  const handleLongPress = useCallback(
+    (routeKey: string) => {
+      navigation.emit({ type: "tabLongPress", target: routeKey });
+    },
+    [navigation],
+  );
 
   return (
     <View style={[styles.tabBarContainer, { bottom: bottomMargin }]}>
@@ -82,69 +158,45 @@ function CustomTabBar({
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: "tabPress",
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
-
-        const onLongPress = () => {
-          navigation.emit({
-            type: "tabLongPress",
-            target: route.key,
-          });
-        };
-
         return (
-          <Pressable
+          <TabBarButton
             key={route.key}
-            accessibilityRole="button"
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
+            isFocused={isFocused}
+            label={options.tabBarAccessibilityLabel ?? options.title}
             testID={options.tabBarButtonTestID}
-            onPress={onPress}
-            onLongPress={onLongPress}
-            style={styles.tabPressable}
-          >
-            {options.tabBarIcon?.({
-              focused: isFocused,
-              color: isFocused ? "#FFFFFF" : "#9E9CA5",
-              size: 22,
-            })}
-          </Pressable>
+            onPress={() => handlePress(route.key, route.name, isFocused)}
+            onLongPress={() => handleLongPress(route.key)}
+            renderIcon={(focused) =>
+              options.tabBarIcon?.({
+                focused,
+                color: "",
+                size: LAYOUT.iconSize,
+              })
+            }
+          />
         );
       })}
     </View>
   );
 }
 
+// ---------------------------------------------------------------------------
+// TabLayout
+// ---------------------------------------------------------------------------
 export default function TabLayout() {
   return (
     <Tabs
       tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-      }}
+      screenOptions={{ headerShown: false, tabBarShowLabel: false }}
     >
-      {TAB_ITEMS.map((item) => (
+      {TAB_ITEMS.map(({ name, title, Icon, fillActive }) => (
         <Tabs.Screen
-          key={item.name}
-          name={item.name}
+          key={name}
+          name={name}
           options={{
-            title: item.title,
+            title,
             tabBarIcon: ({ focused }) => (
-              <TabIcon
-                Icon={item.Icon}
-                focused={focused}
-                fillActive={item.fillActive}
-              />
+              <TabIcon Icon={Icon} focused={focused} fillActive={fillActive} />
             ),
           }}
         />
@@ -153,16 +205,19 @@ export default function TabLayout() {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Styles
+// ---------------------------------------------------------------------------
 const styles = StyleSheet.create({
   tabBarContainer: {
     position: "absolute",
-    left: 16,
-    right: 16,
-    height: 66,
-    borderRadius: 38,
-    backgroundColor: "#16151A",
+    left: LAYOUT.barHorizontalInset,
+    right: LAYOUT.barHorizontalInset,
+    height: LAYOUT.barHeight,
+    borderRadius: LAYOUT.barRadius,
+    backgroundColor: COLORS.barBackground,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.08)",
+    borderColor: COLORS.barBorder,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
@@ -180,10 +235,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   activeIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "#FFFFFF",
+    width: LAYOUT.activeIconSize,
+    height: LAYOUT.activeIconSize,
+    borderRadius: LAYOUT.activeIconRadius,
+    backgroundColor: COLORS.activeBackground,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
@@ -193,8 +248,8 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   inactiveIconContainer: {
-    width: 48,
-    height: 48,
+    width: LAYOUT.activeIconSize,
+    height: LAYOUT.activeIconSize,
     justifyContent: "center",
     alignItems: "center",
   },
