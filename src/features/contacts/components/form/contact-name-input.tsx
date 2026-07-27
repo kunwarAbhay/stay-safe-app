@@ -16,12 +16,10 @@ export const ContactNameInput = ({
 }: ContactNameInputProps) => {
   return (
     <FormControl isRequired className="w-full">
-      <FormControlLabel className="mb-1.5">
-        <FormControlLabelText className="text-foreground font-medium text-base">
-          Full Name
-        </FormControlLabelText>
+      <FormControlLabel>
+        <FormControlLabelText>Full Name</FormControlLabelText>
       </FormControlLabel>
-      <Input className="rounded-full bg-transparent px-4 py-3 border-border">
+      <Input>
         <InputField
           placeholder="Enter your full name"
           value={value}

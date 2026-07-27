@@ -55,12 +55,10 @@ export const ContactGroupSelect = ({
 
   return (
     <FormControl isRequired className="w-full">
-      <FormControlLabel className="mb-1.5">
-        <FormControlLabelText className="text-foreground font-medium text-base">
-          Contact Group
-        </FormControlLabelText>
+      <FormControlLabel>
+        <FormControlLabelText>Contact Group</FormControlLabelText>
       </FormControlLabel>
-      <HStack space="sm" className="flex-wrap gap-2">
+      <HStack space="sm" className="flex-wrap gap-1.5">
         {contactGroups.map((contactGroup) => (
           <ContactGroupChip
             key={contactGroup.value}

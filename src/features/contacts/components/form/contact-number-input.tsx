@@ -42,26 +42,22 @@ export const ContactNumberInput = ({
 }: ContactNumberInputProps) => {
   return (
     <FormControl isRequired className="w-full">
-      <FormControlLabel className="mb-1.5">
-        <FormControlLabelText className="text-foreground font-medium text-base">
-          Contact Number
-        </FormControlLabelText>
+      <FormControlLabel>
+        <FormControlLabelText>Contact Number</FormControlLabelText>
       </FormControlLabel>
       <HStack space="md" className="items-center">
         <Select selectedValue={countryCode} onValueChange={onCountryCodeChange}>
           <SelectTrigger
             variant="outline"
             size="md"
-            className="rounded-full border-border px-3.5 h-[50px] bg-transparent flex-row items-center justify-between gap-1"
+            className="px-4 py-3 gap-1"
           >
             <SelectInput
               placeholder="US +1"
-              className="text-foreground text-base p-0 font-medium"
+              size="md"
+              className="p-0 font-medium"
             />
-            <SelectIcon
-              className="text-foreground h-4 w-4"
-              as={ChevronDownIcon}
-            />
+            <SelectIcon size="sm" as={ChevronDownIcon} />
           </SelectTrigger>
           <SelectPortal>
             <SelectBackdrop />
@@ -79,7 +75,7 @@ export const ContactNumberInput = ({
             </SelectContent>
           </SelectPortal>
         </Select>
-        <Input className="flex-1 rounded-full bg-transparent px-4 py-3 h-[50px] border-border">
+        <Input className="flex-1">
           <InputField
             placeholder="Enter number"
             value={phoneNumber}

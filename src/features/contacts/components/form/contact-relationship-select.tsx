@@ -61,12 +61,10 @@ export const ContactRelationshipSelect = ({
 
   return (
     <FormControl isRequired className="w-full">
-      <FormControlLabel className="mb-1.5">
-        <FormControlLabelText className="text-foreground font-medium text-base">
-          Relationship
-        </FormControlLabelText>
+      <FormControlLabel>
+        <FormControlLabelText>Relationship</FormControlLabelText>
       </FormControlLabel>
-      <HStack className="flex-wrap gap-2">
+      <HStack className="flex-wrap gap-1.5">
         {relationships.map((rel) => (
           <ContactRelationshipChip
             key={rel.value}
