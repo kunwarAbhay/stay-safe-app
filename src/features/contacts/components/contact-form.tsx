@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { VStack } from "@/components/ui/vstack";
-import { Button, ButtonText } from "@/components/ui/button";
 import {
   ContactGroup,
   Relationship,
@@ -21,6 +20,10 @@ export interface ContactFormData {
   sosPermission: boolean;
 }
 
+export interface ContactFormHandle {
+  submit: () => void;
+}
+
 const DEFAULT_CONTACT_FORM_DATA: ContactFormData = {
   name: "",
   mobileCountryCode: "+91",
@@ -31,75 +34,79 @@ const DEFAULT_CONTACT_FORM_DATA: ContactFormData = {
   sosPermission: false,
 };
 
-interface ContactFormProps {
+export interface ContactFormProps {
   contact?: Partial<ContactFormData>;
   onSave?: (data: ContactFormData) => void;
 }
 
-export const ContactForm = ({ contact, onSave }: ContactFormProps) => {
-  const [name, setName] = useState(
-    contact?.name || DEFAULT_CONTACT_FORM_DATA.name,
-  );
-  const [countryCode, setCountryCode] = useState(
-    contact?.mobileCountryCode || DEFAULT_CONTACT_FORM_DATA.mobileCountryCode,
-  );
-  const [phoneNumber, setPhoneNumber] = useState(
-    contact?.mobileNumberValue || DEFAULT_CONTACT_FORM_DATA.mobileNumberValue,
-  );
-  const [contactGroup, setContactGroup] = useState<ContactGroup | null>(
-    contact?.contactGroup || DEFAULT_CONTACT_FORM_DATA.contactGroup,
-  );
-  const [relationship, setRelationship] = useState<Relationship | null>(
-    contact?.relationship || DEFAULT_CONTACT_FORM_DATA.relationship,
-  );
-  const [stayWithMe, setStayWithMe] = useState(
-    contact?.stayWithMePermission ??
-      DEFAULT_CONTACT_FORM_DATA.stayWithMePermission,
-  );
-  const [sos, setSos] = useState(
-    contact?.sosPermission ?? DEFAULT_CONTACT_FORM_DATA.sosPermission,
-  );
+export const ContactForm = forwardRef<ContactFormHandle, ContactFormProps>(
+  ({ contact, onSave }, ref) => {
+    const [name, setName] = useState(
+      contact?.name || DEFAULT_CONTACT_FORM_DATA.name,
+    );
+    const [countryCode, setCountryCode] = useState(
+      contact?.mobileCountryCode || DEFAULT_CONTACT_FORM_DATA.mobileCountryCode,
+    );
+    const [phoneNumber, setPhoneNumber] = useState(
+      contact?.mobileNumberValue || DEFAULT_CONTACT_FORM_DATA.mobileNumberValue,
+    );
+    const [contactGroup, setContactGroup] = useState<ContactGroup | null>(
+      contact?.contactGroup || DEFAULT_CONTACT_FORM_DATA.contactGroup,
+    );
+    const [relationship, setRelationship] = useState<Relationship | null>(
+      contact?.relationship || DEFAULT_CONTACT_FORM_DATA.relationship,
+    );
+    const [stayWithMe, setStayWithMe] = useState(
+      contact?.stayWithMePermission ??
+        DEFAULT_CONTACT_FORM_DATA.stayWithMePermission,
+    );
+    const [sos, setSos] = useState(
+      contact?.sosPermission ?? DEFAULT_CONTACT_FORM_DATA.sosPermission,
+    );
 
-  const handleSubmit = () => {
-    onSave?.({
-      name,
-      mobileCountryCode: countryCode,
-      mobileNumberValue: phoneNumber,
-      contactGroup,
-      relationship,
-      stayWithMePermission: stayWithMe,
-      sosPermission: sos,
-    });
-  };
+    const handleSubmit = () => {
+      onSave?.({
+        name,
+        mobileCountryCode: countryCode,
+        mobileNumberValue: phoneNumber,
+        contactGroup,
+        relationship,
+        stayWithMePermission: stayWithMe,
+        sosPermission: sos,
+      });
+    };
 
-  return (
-    <VStack space="xl" className="w-full">
-      <ContactNameInput value={name} onChangeText={setName} />
+    useImperativeHandle(ref, () => ({
+      submit: handleSubmit,
+    }));
 
-      <ContactNumberInput
-        countryCode={countryCode}
-        onCountryCodeChange={setCountryCode}
-        phoneNumber={phoneNumber}
-        onPhoneNumberChange={setPhoneNumber}
-      />
+    return (
+      <VStack space="xl" className="w-full">
+        <ContactNameInput value={name} onChangeText={setName} />
 
-      <ContactGroupSelect value={contactGroup} onChange={setContactGroup} />
+        <ContactNumberInput
+          countryCode={countryCode}
+          onCountryCodeChange={setCountryCode}
+          phoneNumber={phoneNumber}
+          onPhoneNumberChange={setPhoneNumber}
+        />
 
-      <ContactRelationshipSelect
-        value={relationship}
-        onChange={setRelationship}
-      />
+        <ContactGroupSelect value={contactGroup} onChange={setContactGroup} />
 
-      <ContactPermissionToggles
-        stayWithMe={stayWithMe}
-        onStayWithMeChange={setStayWithMe}
-        sos={sos}
-        onSosChange={setSos}
-      />
+        <ContactRelationshipSelect
+          value={relationship}
+          onChange={setRelationship}
+        />
 
-      <Button className="mt-8 rounded-full py-4" onPress={handleSubmit}>
-        <ButtonText className="text-lg font-semibold">Save Contact</ButtonText>
-      </Button>
-    </VStack>
-  );
-};
+        <ContactPermissionToggles
+          stayWithMe={stayWithMe}
+          onStayWithMeChange={setStayWithMe}
+          sos={sos}
+          onSosChange={setSos}
+        />
+      </VStack>
+    );
+  },
+);
+
+ContactForm.displayName = "ContactForm";
