@@ -10,17 +10,23 @@ import { Contact } from "@/src/features/contacts/types/contact";
 
 export interface ContactListProps {
   contacts: Contact[];
+  onAvatarPress?: (contact: Contact) => void;
 }
 
 export const ContactList = ({
   contacts,
+  onAvatarPress,
   className,
 }: ContactListProps & React.ComponentProps<typeof VStack>) => {
   return (
     <VStack space="md" className="w-full">
       {contacts && contacts.length > 0 ? (
         contacts.map((contact) => (
-          <ContactCard key={contact.id} contact={contact} />
+          <ContactCard
+            key={contact.id}
+            contact={contact}
+            onAvatarPress={onAvatarPress}
+          />
         ))
       ) : (
         <EmptyContactListFallback />

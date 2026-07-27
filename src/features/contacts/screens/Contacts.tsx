@@ -17,6 +17,8 @@ import { ContactFilterOption } from "@/src/features/contacts/types/contact-filte
 import { CONTACT_FILTERS } from "@/src/features/contacts/constants/contact-filters";
 import { useContactFilters } from "@/src/features/contacts/hooks/use-contact-filters";
 import { ContactHeader } from "@/src/features/contacts/components/contact-header";
+import { AddContactButton } from "@/src/features/contacts/components/add-contact-button";
+import { useRouter } from "expo-router";
 
 const INITIAL_CONTACTS: Contact[] = [
   {
@@ -47,6 +49,118 @@ const INITIAL_CONTACTS: Contact[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
+  {
+    id: "3",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "4",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "5",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "6",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "7",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "8",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "9",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "10",
+    name: "Jessica Brown",
+    mobileCountryCode: "1",
+    mobileNumberValue: "5552849172",
+    relationship: Relationship.FAMILY,
+    contactGroup: ContactGroup.INNER_CIRCLE,
+    sosPermission: ContactPermission.ALLOWED,
+    stayWithMePermission: ContactPermission.DENIED,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
 ];
 
 const DEFAULT_FILTERS: ContactFilterOption[] = [
@@ -56,6 +170,7 @@ const DEFAULT_FILTERS: ContactFilterOption[] = [
 ];
 
 export default function Contacts() {
+  const router = useRouter();
   const {
     searchQuery,
     setSearchQuery,
@@ -74,36 +189,59 @@ export default function Contacts() {
     // Modal implementation intentionally omitted as per requirement
   }, []);
 
+  const handleAddContact = useCallback(() => {
+    router.push("/contacts/add");
+  }, [router]);
+
+  const handleAvatarPress = useCallback(
+    (contact: Contact) => {
+      router.push({
+        pathname: "/contacts/[id]",
+        params: { id: contact.id },
+      });
+    },
+    [router],
+  );
+
   return (
-    <ScreenLayout isTabScreen>
-      <VStack space="xl">
-        <ContactHeader />
+    <ScreenLayout>
+      <ScreenLayout.Content isTabScreen>
+        <VStack space="xl">
+          <ContactHeader />
 
-        <VStack space="sm" className="w-full mb-4">
-          <HStack className="w-full items-center gap-3">
-            <ContactSearchInput
-              value={searchQuery}
-              onChangeText={setSearchQuery}
+          <VStack space="sm" className="w-full mb-4">
+            <HStack className="w-full items-center gap-3">
+              <ContactSearchInput
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+              />
+              <FilterToggleButton
+                onPress={handleToggleFilter}
+                isActive={selectedFilters.length > 0}
+              />
+            </HStack>
+
+            <SelectedFilterChips
+              filters={chipFilters}
+              onRemoveFilter={handleRemoveFilter}
             />
-            <FilterToggleButton
-              onPress={handleToggleFilter}
-              isActive={selectedFilters.length > 0}
+
+            <ContactGroupTabs
+              activeContactGroup={activeContactGroup}
+              onContactGroupChange={handleContactGroupTabChange}
             />
-          </HStack>
+          </VStack>
 
-          <SelectedFilterChips
-            filters={chipFilters}
-            onRemoveFilter={handleRemoveFilter}
-          />
-
-          <ContactGroupTabs
-            activeContactGroup={activeContactGroup}
-            onContactGroupChange={handleContactGroupTabChange}
+          <ContactList
+            contacts={filteredContacts}
+            onAvatarPress={handleAvatarPress}
           />
         </VStack>
-        
-        <ContactList contacts={filteredContacts} />
-      </VStack>
+      </ScreenLayout.Content>
+
+      <ScreenLayout.Floating>
+        <AddContactButton onPress={handleAddContact} />
+      </ScreenLayout.Floating>
     </ScreenLayout>
   );
 }

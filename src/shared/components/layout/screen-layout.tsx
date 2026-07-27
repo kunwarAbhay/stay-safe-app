@@ -7,15 +7,60 @@ import { cn } from "@gluestack-ui/utils/nativewind-utils";
 export interface ScreenLayoutProps extends React.ComponentProps<
   typeof ScrollView
 > {
-  /** Indicates if this screen is rendered inside tab navigation (adds extra bottom padding for floating tab bar) */
   isTabScreen?: boolean;
-  /** Whether the screen container should be scrollable. Defaults to true. */
   scrollable?: boolean;
-  /** Whether to wrap the screen in a SafeAreaView. Defaults to true. */
   useSafeArea?: boolean;
   /** Custom safe area edges to apply when useSafeArea is true. */
   edges?: React.ComponentProps<typeof SafeAreaView>["edges"];
 }
+
+export interface ScreenLayoutContentProps extends React.ComponentProps<
+  typeof ScrollView
+> {
+  isTabScreen?: boolean;
+  scrollable?: boolean;
+}
+
+export interface ScreenLayoutFloatingProps {
+  children?: React.ReactNode;
+}
+
+const ScreenLayoutContent = ({
+  isTabScreen = false,
+  scrollable = true,
+  className,
+  children,
+  ...props
+}: ScreenLayoutContentProps) => {
+  const containerPaddingClass = cn("px-5 py-6", isTabScreen ? "pb-30" : "pb-8");
+
+  if (!scrollable) {
+    return (
+      <Box
+        className={cn("flex-1 bg-background", containerPaddingClass, className)}
+        {...props}
+      >
+        {children}
+      </Box>
+    );
+  }
+
+  return (
+    <ScrollView
+      className={cn("flex-1 bg-background", containerPaddingClass, className)}
+      showsVerticalScrollIndicator={false}
+      {...props}
+    >
+      {children}
+    </ScrollView>
+  );
+};
+ScreenLayoutContent.isScreenLayoutContent = true;
+
+const ScreenLayoutFloating = ({ children }: ScreenLayoutFloatingProps) => {
+  return <>{children}</>;
+};
+ScreenLayoutFloating.isScreenLayoutFloating = true;
 
 export const ScreenLayout = ({
   isTabScreen = false,
@@ -26,25 +71,50 @@ export const ScreenLayout = ({
   children,
   ...props
 }: ScreenLayoutProps) => {
-  const containerPaddingClass = cn(
-    "px-5 py-6",
-    isTabScreen ? "pb-30" : "pb-8"
-  );
+  let hasCompoundComponents = false;
+  const contentChildren: React.ReactNode[] = [];
+  const floatingChildren: React.ReactNode[] = [];
+  const otherChildren: React.ReactNode[] = [];
 
-  const content = scrollable ? (
-    <ScrollView
-      className={cn("flex-1 bg-background", containerPaddingClass, className)}
-      showsVerticalScrollIndicator={false}
-      {...props}
-    >
-      {children}
-    </ScrollView>
+  React.Children.forEach(children, (child) => {
+    if (React.isValidElement(child)) {
+      const childType = child.type as any;
+      if (
+        childType === ScreenLayoutContent ||
+        childType?.isScreenLayoutContent
+      ) {
+        hasCompoundComponents = true;
+        contentChildren.push(child);
+      } else if (
+        childType === ScreenLayoutFloating ||
+        childType?.isScreenLayoutFloating
+      ) {
+        hasCompoundComponents = true;
+        floatingChildren.push(child);
+      } else {
+        otherChildren.push(child);
+      }
+    } else {
+      otherChildren.push(child);
+    }
+  });
+
+  const body = hasCompoundComponents ? (
+    <Box className="flex-1 relative bg-background">
+      {contentChildren}
+      {otherChildren}
+      {floatingChildren}
+    </Box>
   ) : (
-    <Box
-      className={cn("flex-1 bg-background", containerPaddingClass, className)}
-      {...props}
-    >
-      {children}
+    <Box className="flex-1 relative bg-background">
+      <ScreenLayoutContent
+        isTabScreen={isTabScreen}
+        scrollable={scrollable}
+        className={className}
+        {...props}
+      >
+        {children}
+      </ScreenLayoutContent>
     </Box>
   );
 
@@ -55,10 +125,13 @@ export const ScreenLayout = ({
         className="flex-1 bg-background"
         edges={edges}
       >
-        {content}
+        {body}
       </SafeAreaView>
     );
   }
 
-  return content;
+  return body;
 };
+
+ScreenLayout.Content = ScreenLayoutContent;
+ScreenLayout.Floating = ScreenLayoutFloating;
