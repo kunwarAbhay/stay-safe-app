@@ -25,6 +25,7 @@ export const useContactFilters = ({
   const {
     selectedFilters,
     chipFilters,
+    setSelectedFilters,
     handleAddFilter,
     handleRemoveFilter,
   } = useFilterSelection(initialFilters);
@@ -47,6 +48,7 @@ export const useContactFilters = ({
     setSearchQuery,
 
     selectedFilters,
+    setSelectedFilters,
     chipFilters,
     handleAddFilter,
     handleRemoveFilter,

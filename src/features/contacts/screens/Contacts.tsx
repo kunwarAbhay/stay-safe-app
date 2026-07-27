@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
@@ -7,18 +7,23 @@ import { ContactSearchInput } from "@/src/features/contacts/components/contact-s
 import { FilterToggleButton } from "@/src/features/contacts/components/filter-toggle-button";
 import { SelectedFilterChips } from "@/src/features/contacts/components/selected-filter-chips";
 import { ContactList } from "@/src/features/contacts/components/contact-list";
+import { ContactFilterModal } from "@/src/features/contacts/components/contact-filter-modal";
 import {
   Contact,
   ContactGroup,
   ContactPermission,
   Relationship,
 } from "@/src/features/contacts/types/contact";
-import { ContactFilterOption } from "@/src/features/contacts/types/contact-filter";
+import {
+  ContactFilterOption,
+  FilterOption,
+} from "@/src/features/contacts/types/contact-filter";
 import { CONTACT_FILTERS } from "@/src/features/contacts/constants/contact-filters";
 import { useContactFilters } from "@/src/features/contacts/hooks/use-contact-filters";
 import { ContactHeader } from "@/src/features/contacts/components/contact-header";
 import { AddContactButton } from "@/src/features/contacts/components/add-contact-button";
 import { useRouter } from "expo-router";
+import { FilterArray } from "../utils/filter-contacts";
 
 const INITIAL_CONTACTS: Contact[] = [
   {
@@ -171,10 +176,13 @@ const DEFAULT_FILTERS: ContactFilterOption[] = [
 
 export default function Contacts() {
   const router = useRouter();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
   const {
     searchQuery,
     setSearchQuery,
     selectedFilters,
+    setSelectedFilters,
     activeContactGroup,
     chipFilters,
     filteredContacts,
@@ -186,8 +194,19 @@ export default function Contacts() {
   });
 
   const handleToggleFilter = useCallback(() => {
-    // Modal implementation intentionally omitted as per requirement
+    setIsFilterModalOpen(true);
   }, []);
+
+  const handleCloseFilterModal = useCallback(() => {
+    setIsFilterModalOpen(false);
+  }, []);
+
+  const handleApplyFilters = useCallback(
+    (filters: ContactFilterOption[]) => {
+      setSelectedFilters(FilterArray.create(filters));
+    },
+    [setSelectedFilters],
+  );
 
   const handleAddContact = useCallback(() => {
     router.push("/contacts/add");
@@ -215,10 +234,7 @@ export default function Contacts() {
                 value={searchQuery}
                 onChangeText={setSearchQuery}
               />
-              <FilterToggleButton
-                onPress={handleToggleFilter}
-                isActive={selectedFilters.length > 0}
-              />
+              <FilterToggleButton onPress={handleToggleFilter} />
             </HStack>
 
             <SelectedFilterChips
@@ -242,6 +258,13 @@ export default function Contacts() {
       <ScreenLayout.Floating>
         <AddContactButton onPress={handleAddContact} />
       </ScreenLayout.Floating>
+
+      <ContactFilterModal
+        isOpen={isFilterModalOpen}
+        onClose={handleCloseFilterModal}
+        selectedFilters={selectedFilters}
+        onApplyFilters={handleApplyFilters}
+      />
     </ScreenLayout>
   );
 }

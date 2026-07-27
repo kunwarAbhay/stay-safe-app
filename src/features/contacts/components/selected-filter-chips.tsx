@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView } from "react-native";
-import { Chip, ChipText } from "@/src/shared/components/chip";
+import { FilterChipItem } from "@/src/features/contacts/components/filter-chip-item";
 import { FilterOption } from "@/src/features/contacts/types/contact-filter";
 import { cn } from "@gluestack-ui/utils/nativewind-utils";
 
@@ -13,36 +13,36 @@ export interface SelectedFilterChipsProps {
   onRemoveFilter?: (filter: FilterOption) => void;
 }
 
-export const SelectedFilterChips = React.memo(({
-  filters = [],
-  onRemoveFilter,
-  className,
-  ...props
-}: SelectedFilterChipsProps & React.ComponentProps<typeof ScrollView>) => {
-  if (!filters || filters.length === 0) return null;
+export const SelectedFilterChips = React.memo(
+  ({
+    filters = [],
+    onRemoveFilter,
+    className,
+    ...props
+  }: SelectedFilterChipsProps & React.ComponentProps<typeof ScrollView>) => {
+    if (!filters || filters.length === 0) return null;
 
-  return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      className={cn("w-full mt-1.5", className)}
-      contentContainerStyle={{ gap: 8 }}
-      {...props}
-    >
-      {filters.map((filter) => (
-        <Chip
-          key={filter.id}
-          isSelected
-          onPress={() => onRemoveFilter?.(filter)}
-          accessibilityLabel={`Remove ${filter.label} filter`}
-        >
-          <ChipText className="font-medium text-sm text-primary-foreground">
-            {filter.label}
-          </ChipText>
-        </Chip>
-      ))}
-    </ScrollView>
-  );
-});
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        className={cn("w-full mt-1.5", className)}
+        contentContainerStyle={{ gap: 8 }}
+        {...props}
+      >
+        {filters.map((filter) => (
+          <FilterChipItem
+            key={filter.id}
+            filter={filter}
+            isSelected={true}
+            onPress={onRemoveFilter}
+            accessibilityLabel={`Remove ${filter.label} filter`}
+            testID={`contacts:selected-chip:${filter.id}`}
+          />
+        ))}
+      </ScrollView>
+    );
+  },
+);
 
 SelectedFilterChips.displayName = "SelectedFilterChips";

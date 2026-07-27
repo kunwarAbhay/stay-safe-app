@@ -106,40 +106,50 @@ export const filterContacts = (
 
 // --- Pure Filter State Helpers ---
 
-export const addFilter = (
-  filters: ContactFilterOption[],
-  newFilter: ContactFilterOption,
-): ContactFilterOption[] => {
-  if (filters.some((f) => f.id === newFilter.id)) return filters;
-  return [...filters, newFilter];
-};
-
 /**
- * Immutably removes a filter option by filter object or ID.
+ * Custom Array subclass for filter lists enabling direct method chaining on state:
+ * `prev.addFilter(newFilter)`
+ * `prev.toggleFilter(targetFilter)`
+ * `prev.removeFilter(targetFilter)`
  */
-export const removeFilter = (
-  filters: ContactFilterOption[],
-  targetFilter: FilterOption,
-): ContactFilterOption[] => {
-  return filters.filter((f) => f.id !== targetFilter.id);
-};
+export class FilterArray<T extends FilterOption = FilterOption> extends Array<T> {
+  static create<T extends FilterOption>(items: T[] = []): FilterArray<T> {
+    const list = new FilterArray<T>();
+    if (Array.isArray(items) && items.length > 0) {
+      list.push(...items);
+    }
+    return list;
+  }
 
-/**
- * Immutably excludes all filters belonging to a specific category.
- */
-export const excludeCategoryFilters = (
-  filters: ContactFilterOption[],
-  categoryToExclude: ContactFilterCategory,
-): ContactFilterOption[] => {
-  return filters.filter((f) => f.category !== categoryToExclude);
-};
+  hasFilter(filter: FilterOption): boolean {
+    return this.some((f) => f.id === filter.id);
+  }
 
-/**
- * Retrieves all active filters belonging to a specific category.
- */
-export const getCategoryFilters = (
-  filters: ContactFilterOption[],
-  category: ContactFilterCategory,
-): ContactFilterOption[] => {
-  return filters.filter((f) => f.category === category);
-};
+  addFilter(newFilter: T): FilterArray<T> {
+    if (this.hasFilter(newFilter)) return this;
+    return FilterArray.create([...this, newFilter]);
+  }
+
+  removeFilter(targetFilter: FilterOption): FilterArray<T> {
+    return FilterArray.create(this.filter((f) => f.id !== targetFilter.id));
+  }
+
+  toggleFilter(targetFilter: T): FilterArray<T> {
+    if (this.hasFilter(targetFilter)) {
+      return this.removeFilter(targetFilter);
+    }
+    return this.addFilter(targetFilter);
+  }
+
+  excludeCategory(categoryToExclude: ContactFilterCategory): FilterArray<T> {
+    return FilterArray.create(
+      this.filter((f) => (f as any).category !== categoryToExclude)
+    );
+  }
+
+  getCategory(category: ContactFilterCategory): FilterArray<T> {
+    return FilterArray.create(
+      this.filter((f) => (f as any).category === category),
+    );
+  }
+}
