@@ -8,8 +8,7 @@ import {
 import { useRouter } from "expo-router";
 import { AddContactHeader } from "../components/add-contact-header";
 import { VStack } from "@/components/ui/vstack";
-import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
+import { SaveContactButton } from "../components/save-contact-button";
 
 export default function AddContact() {
   const router = useRouter();
@@ -32,16 +31,7 @@ export default function AddContact() {
       </ScreenLayout.Content>
 
       <ScreenLayout.Floating>
-        <Box className="absolute bottom-6 left-5 right-5 z-20">
-          <Button
-            className="rounded-full py-4 w-full shadow-lg"
-            onPress={() => formRef.current?.submit()}
-          >
-            <ButtonText className="text-lg font-semibold">
-              Save Contact
-            </ButtonText>
-          </Button>
-        </Box>
+        <SaveContactButton onPress={() => formRef.current?.submit()} />
       </ScreenLayout.Floating>
     </ScreenLayout>
   );
