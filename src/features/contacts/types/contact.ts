@@ -30,5 +30,18 @@ export interface Contact {
   sosPermission: ContactPermission;
   createdAt?: string;
   updatedAt?: string;
-  avatar?: string;
+}
+
+export interface ContactCreateRequest {
+  name: string;
+  mobileCountryCode: string;
+  mobileNumberValue: string;
+  relationship: Relationship;
+  contactGroup: ContactGroup;
+  stayWithMePermission: ContactPermission;
+  sosPermission: ContactPermission;
+}
+
+export interface ContactUpdateRequest extends ContactCreateRequest {
+  id: string;
 }

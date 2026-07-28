@@ -1,14 +1,14 @@
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import {
   ContactGroup,
   Relationship,
 } from "@/src/features/contacts/types/contact";
-import { ContactNameInput } from "./form/contact-name-input";
-import { ContactNumberInput } from "./form/contact-number-input";
-import { ContactGroupSelect } from "./form/contact-group-select";
-import { ContactRelationshipSelect } from "./form/contact-relationship-select";
-import { ContactPermissionToggles } from "./form/contact-permission-toggles";
+import { ContactNameInput } from "@/src/features/contacts/components/form/contact-name-input";
+import { ContactNumberInput } from "@/src/features/contacts/components/form/contact-number-input";
+import { ContactGroupSelect } from "@/src/features/contacts/components/form/contact-group-select";
+import { ContactRelationshipSelect } from "@/src/features/contacts/components/form/contact-relationship-select";
+import { ContactPermissionToggles } from "@/src/features/contacts/components/form/contact-permission-toggles";
 
 export interface ContactFormData {
   name: string;
@@ -63,6 +63,31 @@ export const ContactForm = forwardRef<ContactFormHandle, ContactFormProps>(
     const [sos, setSos] = useState(
       contact?.sosPermission ?? DEFAULT_CONTACT_FORM_DATA.sosPermission,
     );
+
+    useEffect(() => {
+      if (contact) {
+        setName(contact.name || DEFAULT_CONTACT_FORM_DATA.name);
+        setCountryCode(
+          contact.mobileCountryCode || DEFAULT_CONTACT_FORM_DATA.mobileCountryCode,
+        );
+        setPhoneNumber(
+          contact.mobileNumberValue || DEFAULT_CONTACT_FORM_DATA.mobileNumberValue,
+        );
+        setContactGroup(
+          contact.contactGroup ?? DEFAULT_CONTACT_FORM_DATA.contactGroup,
+        );
+        setRelationship(
+          contact.relationship ?? DEFAULT_CONTACT_FORM_DATA.relationship,
+        );
+        setStayWithMe(
+          contact.stayWithMePermission ??
+            DEFAULT_CONTACT_FORM_DATA.stayWithMePermission,
+        );
+        setSos(
+          contact.sosPermission ?? DEFAULT_CONTACT_FORM_DATA.sosPermission,
+        );
+      }
+    }, [contact]);
 
     const handleSubmit = () => {
       onSave?.({

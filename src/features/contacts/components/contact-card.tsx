@@ -46,15 +46,14 @@ export const ContactCard = ({
 
   return (
     <Box
-      className={cn("w-full bg-card rounded-2xl p-2.5", className)}
+      className={cn("w-full bg-card rounded-2xl border border-border shadow-sm p-1", className)}
       {...props}
     >
       <Box className="bg-muted/70 dark:bg-muted/50 rounded-2xl p-3.5 flex-row items-center justify-between">
         <HStack space="md" className="items-center flex-1 pr-2">
           <Pressable onPress={handleAvatarPress}>
             <Avatar className="rounded-full bg-secondary w-12.5 h-12.5">
-              <AvatarFallbackText>{contact.name}</AvatarFallbackText>
-              {contact.avatar && <AvatarImage source={{ uri: contact.avatar }} />}
+              <AvatarFallbackText>{contact.name.charAt(0)}</AvatarFallbackText>
             </Avatar>
           </Pressable>
 

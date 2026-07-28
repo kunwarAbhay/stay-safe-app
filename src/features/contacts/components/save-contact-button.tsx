@@ -11,6 +11,7 @@ export const SaveContactButton = ({
   return (
     <Box className="absolute bottom-6 left-5 right-5 z-20">
       <Button
+        onPress={onPress}
         className={cn("rounded-full py-4 w-full shadow-lg", className)}
         {...props}
       >

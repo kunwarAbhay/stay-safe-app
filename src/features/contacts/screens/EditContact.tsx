@@ -6,24 +6,81 @@ import {
   ContactFormHandle,
 } from "@/src/features/contacts/components/contact-form";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { EditContactHeader } from "../components/edit-contact-header";
+import { EditContactHeader } from "@/src/features/contacts/components/edit-contact-header";
 import { VStack } from "@/components/ui/vstack";
-import { SaveContactButton } from "../components/save-contact-button";
+import { SaveContactButton } from "@/src/features/contacts/components/save-contact-button";
+import { useUpdateContact, useContacts } from "@/src/features/contacts/hooks/use-contacts";
+import { ContactPermission } from "@/src/features/contacts/types/contact";
+import { Text } from "@/components/ui/text";
 
 export default function EditContact() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const formRef = useRef<ContactFormHandle>(null);
 
-  // API Placeholder: Fetch existing contact details by ID
-  // const { data: contact, isLoading } = useContactQuery(id);
-  const contactDetails: ContactFormData | undefined = undefined;
+  const { data: contactsData } = useContacts();
+  const contact = contactsData?.content.find(
+    (c) => String(c.id) === String(id),
+  );
+  const contactDetails: ContactFormData | undefined = contact
+    ? {
+        name: contact.name,
+        mobileCountryCode: contact.mobileCountryCode?.startsWith("+")
+          ? contact.mobileCountryCode
+          : `+${contact.mobileCountryCode}`,
+        mobileNumberValue: contact.mobileNumberValue,
+        contactGroup: contact.contactGroup,
+        relationship: contact.relationship,
+        stayWithMePermission:
+          contact.stayWithMePermission === ContactPermission.ALLOWED,
+        sosPermission: contact.sosPermission === ContactPermission.ALLOWED,
+      }
+    : undefined;
+
+  const { mutate: updateContact, isPending, error } = useUpdateContact();
 
   const handleUpdateContact = (contactFormData: ContactFormData) => {
-    // API Placeholder: await updateContactMutation({ id, ...formData });
-    console.log(`Updating contact [id: ${id}] API payload:`, contactFormData);
+    const cleanCountryCode = contactFormData.mobileCountryCode.replace(
+      /\D/g,
+      "",
+    );
+    const cleanPhoneNumber = contactFormData.mobileNumberValue.replace(
+      /\D/g,
+      "",
+    );
 
-    router.back();
+    if (
+      !id ||
+      !contactFormData.name ||
+      !cleanCountryCode ||
+      !cleanPhoneNumber ||
+      !contactFormData.contactGroup ||
+      !contactFormData.relationship
+    ) {
+      return;
+    }
+
+    updateContact(
+      {
+        id,
+        name: contactFormData.name.trim(),
+        mobileCountryCode: cleanCountryCode,
+        mobileNumberValue: cleanPhoneNumber,
+        contactGroup: contactFormData.contactGroup,
+        relationship: contactFormData.relationship,
+        stayWithMePermission: contactFormData.stayWithMePermission
+          ? ContactPermission.ALLOWED
+          : ContactPermission.DENIED,
+        sosPermission: contactFormData.sosPermission
+          ? ContactPermission.ALLOWED
+          : ContactPermission.DENIED,
+      },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      },
+    );
   };
 
   return (
@@ -31,6 +88,11 @@ export default function EditContact() {
       <ScreenLayout.Content className="pb-28">
         <VStack space="xl">
           <EditContactHeader />
+          {error && (
+            <Text className="text-error text-center text-sm px-4">
+              {error.message || "Failed to update contact."}
+            </Text>
+          )}
           <ContactForm
             ref={formRef}
             contact={contactDetails}
@@ -40,7 +102,11 @@ export default function EditContact() {
       </ScreenLayout.Content>
 
       <ScreenLayout.Floating>
-        <SaveContactButton onPress={() => formRef.current?.submit()} />
+        <SaveContactButton
+          onPress={() => formRef.current?.submit()}
+          // @ts-ignore
+          disabled={isPending}
+        />
       </ScreenLayout.Floating>
     </ScreenLayout>
   );

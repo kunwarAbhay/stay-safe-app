@@ -8,175 +8,26 @@ import { FilterToggleButton } from "@/src/features/contacts/components/filter-to
 import { SelectedFilterChips } from "@/src/features/contacts/components/selected-filter-chips";
 import { ContactList } from "@/src/features/contacts/components/contact-list";
 import { ContactFilterModal } from "@/src/features/contacts/components/contact-filter-modal";
-import {
-  Contact,
-  ContactGroup,
-  ContactPermission,
-  Relationship,
-} from "@/src/features/contacts/types/contact";
-import {
-  ContactFilterOption,
-  FilterOption,
-} from "@/src/features/contacts/types/contact-filter";
+import { Contact } from "@/src/features/contacts/types/contact";
+import { ContactFilterOption } from "@/src/features/contacts/types/contact-filter";
 import { CONTACT_FILTERS } from "@/src/features/contacts/constants/contact-filters";
 import { useContactFilters } from "@/src/features/contacts/hooks/use-contact-filters";
 import { ContactHeader } from "@/src/features/contacts/components/contact-header";
 import { AddContactButton } from "@/src/features/contacts/components/add-contact-button";
 import { useRouter } from "expo-router";
-import { FilterArray } from "../utils/filter-contacts";
+import { FilterArray } from "@/src/features/contacts/utils/filter-contacts";
+import { useContacts } from "@/src/features/contacts/hooks/use-contacts";
+import { Spinner } from "@/components/ui/spinner";
+import { Text } from "@/components/ui/text";
+import { Button, ButtonText } from "@/components/ui/button";
 
-const INITIAL_CONTACTS: Contact[] = [
-  {
-    id: "1",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.NEARBY_HELPERS,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.ALLOWED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "3",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "4",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "5",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "6",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "7",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "8",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "9",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "10",
-    name: "Jessica Brown",
-    mobileCountryCode: "1",
-    mobileNumberValue: "5552849172",
-    relationship: Relationship.FAMILY,
-    contactGroup: ContactGroup.INNER_CIRCLE,
-    sosPermission: ContactPermission.ALLOWED,
-    stayWithMePermission: ContactPermission.DENIED,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-const DEFAULT_FILTERS: ContactFilterOption[] = [
-  CONTACT_FILTERS.INNER_CIRCLE,
-  CONTACT_FILTERS.SOS,
-  CONTACT_FILTERS.STAY_WITH_ME,
-];
+const DEFAULT_FILTERS: ContactFilterOption[] = [CONTACT_FILTERS.INNER_CIRCLE];
 
 export default function Contacts() {
   const router = useRouter();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  const { data, isLoading, isError, error, refetch } = useContacts();
 
   const {
     searchQuery,
@@ -189,7 +40,7 @@ export default function Contacts() {
     handleRemoveFilter,
     handleContactGroupTabChange,
   } = useContactFilters({
-    initialContacts: INITIAL_CONTACTS,
+    initialContacts: data?.content || [],
     initialFilters: DEFAULT_FILTERS,
   });
 
@@ -248,10 +99,40 @@ export default function Contacts() {
             />
           </VStack>
 
-          <ContactList
-            contacts={filteredContacts}
-            onAvatarPress={handleAvatarPress}
-          />
+          {isLoading ? (
+            <VStack
+              className="flex-1 justify-center items-center py-10"
+              space="md"
+            >
+              <Spinner size="large" />
+              <Text className="text-muted-foreground">Loading contacts...</Text>
+            </VStack>
+          ) : isError ? (
+            <VStack
+              className="flex-1 justify-center items-center py-10"
+              space="md"
+            >
+              <Text className="text-error font-semibold">
+                Failed to load contacts
+              </Text>
+              <Text className="text-muted-foreground text-sm text-center">
+                {error?.message ||
+                  "Please check your network connection and try again."}
+              </Text>
+              <Button
+                variant="outline"
+                onPress={() => refetch()}
+                className="mt-2"
+              >
+                <ButtonText>Retry</ButtonText>
+              </Button>
+            </VStack>
+          ) : (
+            <ContactList
+              contacts={filteredContacts}
+              onAvatarPress={handleAvatarPress}
+            />
+          )}
         </VStack>
       </ScreenLayout.Content>
 
