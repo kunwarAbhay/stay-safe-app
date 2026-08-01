@@ -1,4 +1,5 @@
 import React from "react";
+import { KeyboardAvoidingView, Platform } from "react-native";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Box } from "@/components/ui/box";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
@@ -10,6 +11,8 @@ export interface ScreenLayoutProps extends React.ComponentProps<
   isTabScreen?: boolean;
   scrollable?: boolean;
   useSafeArea?: boolean;
+  useKeyboardAvoiding?: boolean;
+  keyboardBehavior?: "padding" | "height" | "position";
   /** Custom safe area edges to apply when useSafeArea is true. */
   edges?: React.ComponentProps<typeof SafeAreaView>["edges"];
 }
@@ -66,6 +69,8 @@ export const ScreenLayout = ({
   isTabScreen = false,
   scrollable = true,
   useSafeArea = true,
+  useKeyboardAvoiding = false,
+  keyboardBehavior = Platform.OS === "ios" ? "padding" : "height",
   edges,
   className,
   children,
@@ -118,19 +123,33 @@ export const ScreenLayout = ({
     </Box>
   );
 
+  let result = body;
+
+  if (useKeyboardAvoiding) {
+    result = (
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={keyboardBehavior}
+        className="flex-1"
+      >
+        {result}
+      </KeyboardAvoidingView>
+    );
+  }
+
   if (useSafeArea) {
-    return (
+    result = (
       <SafeAreaView
         style={{ flex: 1 }}
         className="flex-1 bg-background"
         edges={edges}
       >
-        {body}
+        {result}
       </SafeAreaView>
     );
   }
 
-  return body;
+  return result;
 };
 
 ScreenLayout.Content = ScreenLayoutContent;

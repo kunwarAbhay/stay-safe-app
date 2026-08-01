@@ -1,2 +1,2 @@
-import Tracker from '@/src/features/tracker/screens/Tracker';
-export default Tracker;
+// import Tracker from '@/src/features/tracker/screens/Tracker';
+// export default Tracker;
