@@ -68,6 +68,14 @@ const buttonTextStyle = tva({
 const buttonSpinnerStyle = tva({
   base: '',
   parentVariants: {
+    variant: {
+      default: 'text-primary-foreground',
+      destructive: 'text-white',
+      outline: 'text-foreground',
+      secondary: 'text-secondary-foreground',
+      ghost: 'text-foreground',
+      link: 'text-primary',
+    },
     size: {
       default: 'h-4 w-4',
       sm: 'h-3 w-3',
@@ -166,8 +174,17 @@ const ButtonSpinner = React.forwardRef<
   React.ElementRef<typeof UIButton.Spinner>,
   React.ComponentPropsWithoutRef<typeof UIButton.Spinner>
 >(({ className, ...props }, ref) => {
-  const { size: parentSize } = useStyleContext(SCOPE);
-  return <UIButton.Spinner ref={ref} {...props} className={buttonSpinnerStyle({ parentVariants: { size: parentSize }, class: className })} />;
+  const { size: parentSize, variant: parentVariant } = useStyleContext(SCOPE);
+  return (
+    <UIButton.Spinner
+      ref={ref}
+      {...props}
+      className={buttonSpinnerStyle({
+        parentVariants: { size: parentSize, variant: parentVariant },
+        class: className,
+      })}
+    />
+  );
 });
 type IButtonIcon = React.ComponentPropsWithoutRef<typeof UIButton.Icon> &
   VariantProps<typeof buttonIconStyle> & {

@@ -25,13 +25,13 @@ export function SubmitButton({
   return (
     <Button
       size="lg"
-      className={cn("rounded-full bg-primary-500 mt-4", className)}
+      className={cn("rounded-full mt-4", className)}
       onPress={onPress}
       disabled={disabled}
       {...props}
     >
       {isLoading ? (
-        <ButtonSpinner color="white" />
+        <ButtonSpinner />
       ) : typeof content === "string" ? (
         <ButtonText>{content}</ButtonText>
       ) : (
