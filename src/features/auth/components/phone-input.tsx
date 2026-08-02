@@ -30,7 +30,7 @@ export interface PhoneInputProps {
   placeholder?: string;
 }
 
-export function PhoneInput({
+export const PhoneInput = ({
   countryCode,
   onCountryCodeChange,
   phoneNumber,
@@ -39,7 +39,7 @@ export function PhoneInput({
   placeholder = "Enter mobile number",
   className,
   ...props
-}: PhoneInputProps & React.ComponentProps<typeof FormControl>) {
+}: PhoneInputProps & React.ComponentProps<typeof FormControl>) => {
   return (
     <FormControl
       isInvalid={Boolean(errorMsg)}
@@ -90,4 +90,4 @@ export function PhoneInput({
       </FormControlError>
     </FormControl>
   );
-}
+};

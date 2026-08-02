@@ -1,1 +1,2 @@
-export { Verify as default } from "@/src/features/auth/screens/Verify";
+import Verify from "@/src/features/auth/screens/verify";
+export default Verify;

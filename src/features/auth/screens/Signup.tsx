@@ -5,12 +5,12 @@ import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { Box } from "@/components/ui/box";
-import { useSignup } from "@/src/features/auth/hooks/useSignup";
-import { PhoneInput } from "@/src/features/auth/components/PhoneInput";
+import { useSignup } from "@/src/features/auth/hooks/use-signup";
+import { PhoneInput } from "@/src/features/auth/components/phone-input";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
-export function Signup() {
+export default function Signup() {
   const {
     countryCode,
     setCountryCode,

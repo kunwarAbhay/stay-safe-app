@@ -14,7 +14,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/src/api/query-client";
 import { ClerkProvider } from "@clerk/expo";
 import { tokenCache } from "@clerk/expo/token-cache";
-import { AuthGuard } from "@/src/features/auth/components/AuthGuard";
+import { AuthGuard } from "@/src/features/auth/components/auth-guard";
 
 export {
   // Catch any errors thrown by the Layout component.

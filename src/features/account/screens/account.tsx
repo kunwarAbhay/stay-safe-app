@@ -6,7 +6,7 @@ import { AccountProfileCard } from "@/src/features/account/components/account-pr
 import { PersonalDetailsCard } from "@/src/features/account/components/personal-details-card";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 
-export function Account() {
+export default function Account() {
   const {
     fullname,
     phoneNumber,

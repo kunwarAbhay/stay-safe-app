@@ -5,12 +5,12 @@ import { Heading } from "@/components/ui/heading";
 import { Box } from "@/components/ui/box";
 import { Pressable } from "@/components/ui/pressable";
 import { Link } from "@/components/ui/link";
-import { useLogin } from "@/src/features/auth/hooks/useLogin";
-import { PhoneInput } from "@/src/features/auth/components/PhoneInput";
+import { useLogin } from "@/src/features/auth/hooks/use-login";
+import { PhoneInput } from "@/src/features/auth/components/phone-input";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
-export function Login() {
+export default function Login() {
   const {
     countryCode,
     setCountryCode,

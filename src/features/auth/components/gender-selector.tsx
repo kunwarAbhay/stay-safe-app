@@ -12,11 +12,11 @@ export interface GenderSelectorProps {
   isDisabled?: boolean;
 }
 
-export function GenderSelector({
+export const GenderSelector = ({
   value,
   onChange,
   isDisabled = false,
-}: GenderSelectorProps) {
+}: GenderSelectorProps) => {
   return (
     <HStack space="md" className="justify-between">
       {GENDER_OPTIONS.map((gender) => {
@@ -59,4 +59,4 @@ export function GenderSelector({
       })}
     </HStack>
   );
-}
+};

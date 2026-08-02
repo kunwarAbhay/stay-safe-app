@@ -14,7 +14,7 @@ import {
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
-export function Verify() {
+export default function Verify() {
   const { signIn, fetchStatus: signInFetchStatus } = useSignIn();
   const { signUp, fetchStatus: signUpFetchStatus } = useSignUp();
   const router = useRouter();

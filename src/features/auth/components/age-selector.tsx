@@ -18,7 +18,7 @@ export interface AgeSelectProps extends React.ComponentProps<typeof Select> {
   onChange: (age: string) => void;
 }
 
-export function AgeSelector({ value, onChange, ...props }: AgeSelectProps) {
+export const AgeSelector = ({ value, onChange, ...props }: AgeSelectProps) => {
   return (
     <Select onValueChange={onChange} selectedValue={value} {...props}>
       <SelectTrigger
@@ -42,4 +42,4 @@ export function AgeSelector({ value, onChange, ...props }: AgeSelectProps) {
       </SelectPortal>
     </Select>
   );
-}
+};

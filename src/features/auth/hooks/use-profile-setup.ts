@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useUser } from "@clerk/expo";
 import { useRouter } from "expo-router";
 
-export function useProfileSetup() {
+export const useProfileSetup = () => {
   const { user } = useUser();
   const router = useRouter();
 
@@ -60,4 +60,4 @@ export function useProfileSetup() {
     isFormValid,
     handleSave,
   };
-}
+};

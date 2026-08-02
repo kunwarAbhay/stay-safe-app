@@ -11,13 +11,13 @@ import {
   FormControlErrorText,
 } from "@/components/ui/form-control";
 import { UserCircle2 } from "lucide-react-native";
-import { useProfileSetup } from "@/src/features/auth/hooks/useProfileSetup";
-import { AgeSelector } from "@/src/features/auth/components/AgeSelector";
-import { GenderSelector } from "@/src/features/auth/components/GenderSelector";
+import { useProfileSetup } from "@/src/features/auth/hooks/use-profile-setup";
+import { AgeSelector } from "@/src/features/auth/components/age-selector";
+import { GenderSelector } from "@/src/features/auth/components/gender-selector";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
-export function Profile() {
+export default function Profile() {
   const {
     fullname,
     setFullname,

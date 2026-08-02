@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { formatPhoneNumber } from "@/src/shared/utils/phone";
 import { DEFAULT_COUNTRY_CODE } from "@/src/config/constants";
 
-export function useSignup() {
+export const useSignup = () => {
   const { signUp, fetchStatus: signUpFetchStatus } = useSignUp();
   const router = useRouter();
 
@@ -53,4 +53,4 @@ export function useSignup() {
     isFetching,
     handleContinue,
   };
-}
+};

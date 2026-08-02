@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/expo";
 import { useRouter, useSegments } from "expo-router";
 
-export function AuthGuard({ children }: { children: React.ReactNode }) {
+export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const { isLoaded, isSignedIn } = useAuth();
   const { user, isLoaded: userLoaded } = useUser();
   const segments = useSegments();
@@ -26,4 +26,4 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   }, [isLoaded, isSignedIn, userLoaded, user, segments, router]);
 
   return <>{children}</>;
-}
+};

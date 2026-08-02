@@ -1,1 +1,2 @@
-export { Profile as default } from "@/src/features/auth/screens/Profile";
+import Profile from "@/src/features/auth/screens/profile";
+export default Profile;

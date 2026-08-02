@@ -1,1 +1,2 @@
-export { Login as default } from "@/src/features/auth/screens/Login";
+import Login from "@/src/features/auth/screens/login";
+export default Login;
