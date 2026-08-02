@@ -1,8 +1,7 @@
-import { TouchableOpacity } from "react-native";
 import { HStack } from "@/components/ui/hstack";
-import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Icon } from "@/components/ui/icon";
+import { Pressable } from "@/components/ui/pressable";
 import { GENDER_OPTIONS } from "@/src/config/constants";
 import { cn } from "@gluestack-ui/utils/nativewind-utils";
 
@@ -22,39 +21,35 @@ export const GenderSelector = ({
       {GENDER_OPTIONS.map((gender) => {
         const isSelected = value === gender.id;
         return (
-          <TouchableOpacity
+          <Pressable
             key={gender.id}
             disabled={isDisabled}
             onPress={() => onChange(gender.id)}
-            style={{ flex: 1 }}
+            className={cn(
+              "flex-1 items-center py-4 rounded-xl border bg-white",
+              isSelected
+                ? "border-primary bg-primary/90"
+                : "border-outline-200 bg-white",
+            )}
           >
-            <Box
+            <Icon
+              as={gender.icon}
               className={cn(
-                "items-center py-4 rounded-xl border bg-white",
+                "mb-2",
+                isSelected ? "text-primary-foreground" : "text-typography-600",
+              )}
+              size="xl"
+            />
+            <Text
+              className={cn(
                 isSelected
-                  ? "border-primary-500 bg-primary-50"
-                  : "border-outline-200",
+                  ? "text-primary-foreground font-medium"
+                  : "text-typography-600",
               )}
             >
-              <Icon
-                as={gender.icon}
-                className={cn(
-                  "mb-2",
-                  isSelected ? "text-primary-500" : "text-typography-600",
-                )}
-                size="xl"
-              />
-              <Text
-                className={
-                  isSelected
-                    ? "text-primary-600 font-medium"
-                    : "text-typography-600"
-                }
-              >
-                {gender.label}
-              </Text>
-            </Box>
-          </TouchableOpacity>
+              {gender.label}
+            </Text>
+          </Pressable>
         );
       })}
     </HStack>
