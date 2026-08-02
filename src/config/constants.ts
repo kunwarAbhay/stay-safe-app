@@ -35,3 +35,6 @@ export const AGE_OPTIONS = Array.from({ length: 60 }, (_, i) =>
 
 export const FALLBACK_PROFILE_IMG_URL =
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop";
+
+export const OTP_LENGTH = 6;  
+export const RESEND_TIMER_SECONDS = 30
