@@ -4,11 +4,12 @@ import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { Box } from "@/components/ui/box";
 import { Pressable } from "@/components/ui/pressable";
-import { Link } from "@/components/ui/link";
 import { useLogin } from "@/src/features/auth/hooks/use-login";
 import { PhoneInput } from "@/src/features/auth/components/phone-input";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
+import { Shield } from "lucide-react-native";
+import { Link } from "expo-router";
 
 export default function Login() {
   const {
@@ -29,22 +30,20 @@ export default function Login() {
       className="px-6 justify-center"
     >
       <VStack space="xl">
-        <Box className="items-center mb-8">
-          <Heading size="3xl" className="text-center text-primary-500 mb-2">
-            Staysafe
+        <Box className="items-center mb-8 mt-12">
+          <Box className="w-20 h-20 rounded-full bg-primary items-center justify-center mb-6">
+            <Shield color="white" size={32} />
+          </Box>
+          <Text className="text-primary font-bold mb-2 tracking-widest text-xs">
+            WELCOME BACK
+          </Text>
+          <Heading size="3xl" className="text-center text-typography-900 mb-4">
+            Log in to your account.
           </Heading>
-          <Text size="lg" className="text-center text-typography-500">
-            Log In
+          <Text size="md" className="text-center text-typography-500">
+            Enter your phone number to receive a secure OTP for quick access.
           </Text>
         </Box>
-
-        <VStack space="md" className="mb-4">
-          <Heading size="2xl">Enter Your Phone Number</Heading>
-          <Text size="md" className="text-typography-500">
-            Your verified number is crucial for sending emergency alerts and
-            securing your account.
-          </Text>
-        </VStack>
 
         <PhoneInput
           countryCode={countryCode}
@@ -61,20 +60,11 @@ export default function Login() {
           onPress={handleContinue}
         />
 
-        <Text className="text-center text-sm text-typography-400 mt-6">
-          By Continuing you Agree to Our{" "}
-          <Text className="font-bold text-typography-900">
-            Terms of service
-          </Text>{" "}
-          and{" "}
-          <Text className="font-bold text-typography-900">Privacy policy</Text>
-        </Text>
-
-        <HStack className="justify-center mt-4" space="sm">
+        <HStack className="justify-center mt-6" space="sm">
           <Text className="text-typography-500">Don't have an account?</Text>
-          <Link href="/signup">
+          <Link href="/signup" asChild>
             <Pressable>
-              <Text className="text-primary-500 font-bold">Sign up</Text>
+              <Text className="text-primary font-bold">Sign Up</Text>
             </Pressable>
           </Link>
         </HStack>
