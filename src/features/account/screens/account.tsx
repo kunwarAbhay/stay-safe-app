@@ -32,7 +32,6 @@ export default function Account() {
 
         <PersonalDetailsCard fullname={fullname} age={age} gender={gender} />
 
-        {/* Logout Button */}
         <SubmitButton
           label="Log Out"
           isLoading={isSigningOut}

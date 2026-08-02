@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable } from "react-native";
-import { useUser } from "@clerk/expo";
+import { useUser } from "@/src/features/auth/hooks/use-user";
 import { useRouter } from "expo-router";
 import {
   Avatar,
@@ -21,10 +21,12 @@ export const HomeHeader = ({
   const router = useRouter();
 
   const userName = (user?.unsafeMetadata?.fullname as string) || "User";
-  
   const userInitial = userName.at(0)?.toUpperCase() || "U";
-
   const userImage = user?.imageUrl || FALLBACK_PROFILE_IMG_URL;
+
+  const handleGoToAccount = () => {
+    router.push("/account/index");
+  };
 
   return (
     <HStack className="justify-between items-center" {...props}>
@@ -32,7 +34,7 @@ export const HomeHeader = ({
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Open Account"
-          onPress={() => router.push("/account")}
+          onPress={handleGoToAccount}
         >
           <Avatar className="w-10 h-10 rounded-full">
             <AvatarFallbackText>{userInitial}</AvatarFallbackText>

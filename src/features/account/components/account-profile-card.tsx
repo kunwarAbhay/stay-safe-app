@@ -1,5 +1,4 @@
-import React from "react";
-import { View, Image, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
 import {
   Avatar,
   AvatarFallbackText,
@@ -24,7 +23,6 @@ export const AccountProfileCard = ({
 }: AccountProfileCardProps) => {
   return (
     <View className="bg-white rounded-3xl p-6 items-center shadow-sm border border-gray-100/60">
-      {/* Avatar Container with Edit Badge */}
       <View className="relative mb-3">
         <Avatar className="w-24 h-24 rounded-full">
           <AvatarFallbackText>
@@ -42,7 +40,6 @@ export const AccountProfileCard = ({
         </Pressable>
       </View>
 
-      {/* Name and Contact Info */}
       <VStack space="xs" className="items-center">
         <Text className="text-xl font-bold text-gray-900">{fullname}</Text>
         <Text className="text-sm text-gray-500 font-medium">{phoneNumber}</Text>

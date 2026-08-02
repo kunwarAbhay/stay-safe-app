@@ -21,19 +21,16 @@ export const PersonalDetailsCard = ({
       </Text>
 
       <View className="bg-white rounded-3xl px-5 py-1 shadow-sm border border-gray-100/60">
-        {/* Full Name Row */}
         <HStack className="justify-between items-center py-3.5 border-b border-gray-100">
           <Text className="text-sm text-gray-500 font-medium">Full name</Text>
           <Text className="text-sm text-gray-900 font-bold">{fullname}</Text>
         </HStack>
 
-        {/* Age Row */}
         <HStack className="justify-between items-center py-3.5 border-b border-gray-100">
           <Text className="text-sm text-gray-500 font-medium">Age</Text>
           <Text className="text-sm text-gray-900 font-bold">{age}</Text>
         </HStack>
 
-        {/* Gender Row */}
         <HStack className="justify-between items-center py-3.5">
           <Text className="text-sm text-gray-500 font-medium">Gender</Text>
           <Text className="text-sm text-gray-900 font-bold">{gender}</Text>
