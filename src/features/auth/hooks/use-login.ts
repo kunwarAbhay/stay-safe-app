@@ -8,7 +8,7 @@ export const useLogin = () => {
   const { signIn, fetchStatus } = useSignIn();
   const router = useRouter();
 
-  const [countryCode, setCountryCode] = useState(DEFAULT_COUNTRY_CODE);
+  const [countryCode, setCountryCode] = useState(DEFAULT_COUNTRY_CODE.code);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -59,4 +59,4 @@ export const useLogin = () => {
     isFetching,
     handleContinue,
   };
-}
+};
