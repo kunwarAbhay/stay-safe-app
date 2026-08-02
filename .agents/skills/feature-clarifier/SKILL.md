@@ -1,6 +1,6 @@
 ---
 name: feature-clarifier
-description: Use this skill at the start of any non-trivial feature request — such as "implement feature X", "build [feature]", "add support for X", or user flow descriptions — BEFORE code, component, or API integration work begins. Runs BEFORE rn-feature-component or rn-api-integrator when a request is feature-level rather than a single component or endpoint. Do NOT trigger on small, clearly-scoped asks (e.g., "add a loading spinner") or bug fixes.
+description: Use this skill at the start of any non-trivial feature request — such as "implement feature X", "build [feature]", "add support for X", or user flow descriptions — BEFORE code, component, or API integration work begins. Runs BEFORE rn-screen-builder or rn-api-integrator when a request is feature-level rather than a single component or endpoint. Do NOT trigger on small, clearly-scoped asks (e.g., "add a loading spinner") or bug fixes.
 ---
 
 # Feature Clarifier
@@ -54,4 +54,4 @@ Generate a concise brief markdown file for user review before proceeding to code
 ## Fast-Track Guardrails & Anti-Stalling Rules
 - **Well-Specified Requests**: If the user's prompt provides sufficient detail to proceed safely (common for small-to-medium features), state working assumptions briefly in the brief and move straight to implementation. Do NOT manufacture questions to appear thorough.
 - **Zero Duplication**: Never ask something answered earlier in conversation or documented in files.
-- **Immediate Handoff**: Once blocking items are resolved and the brief is presented, hand off immediately to `rn-feature-component` or `rn-api-integrator` to execute code changes.
+- **Immediate Handoff**: Once blocking items are resolved and the brief is presented, hand off immediately to `rn-screen-builder` or `rn-api-integrator` to execute code changes.

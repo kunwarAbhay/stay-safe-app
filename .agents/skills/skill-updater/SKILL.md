@@ -1,6 +1,6 @@
 ---
 name: skill-updater
-description: Update and refine an existing skill file (such as rn-component-builder or gluestack-ui-v5) based on conversation history, user feedback, manual code edits, or bug fixes. Use this whenever the user asks to "update the skill based on recent mistakes", "refine the skill from conversation history", "audit skill against bugs", "learn from component building mistakes", "add guardrails/checklist to skill based on user edits", or "improve skill instructions from feedback".
+description: Update and refine an existing skill file (such as rn-ui-builder, rn-screen-builder, or gluestack-ui-v5) based on conversation history, user feedback, manual code edits, or bug fixes. Use this whenever the user asks to "update the skill based on recent mistakes", "refine the skill from conversation history", "audit skill against bugs", "learn from component building mistakes", "add guardrails/checklist to skill based on user edits", or "improve skill instructions from feedback".
 ---
 
 # Skill Refiner & Updater
