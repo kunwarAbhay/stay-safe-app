@@ -19,7 +19,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       const hasProfile = user?.unsafeMetadata?.fullname;
       if (!hasProfile && segments[1] !== "profile") {
         router.replace("/profile");
-      } else if (hasProfile && inAuthGroup) {
+      } else if (hasProfile && inAuthGroup && segments[1] !== "profile") {
         router.replace("/");
       }
     }

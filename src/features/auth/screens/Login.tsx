@@ -7,7 +7,7 @@ import { Pressable } from "@/components/ui/pressable";
 import { Link } from "@/components/ui/link";
 import { useLogin } from "@/src/features/auth/hooks/useLogin";
 import { PhoneInput } from "@/src/features/auth/components/PhoneInput";
-import { SubmitButton } from "@/src/shared/components/button/SubmitButton";
+import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
 export function Login() {

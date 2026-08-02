@@ -14,7 +14,7 @@ import { UserCircle2 } from "lucide-react-native";
 import { useProfileSetup } from "@/src/features/auth/hooks/useProfileSetup";
 import { AgeSelector } from "@/src/features/auth/components/AgeSelector";
 import { GenderSelector } from "@/src/features/auth/components/GenderSelector";
-import { SubmitButton } from "@/src/shared/components/button/SubmitButton";
+import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
 export function Profile() {

@@ -7,7 +7,7 @@ import { Heading } from "@/components/ui/heading";
 import { Box } from "@/components/ui/box";
 import { useSignup } from "@/src/features/auth/hooks/useSignup";
 import { PhoneInput } from "@/src/features/auth/components/PhoneInput";
-import { SubmitButton } from "@/src/shared/components/button/SubmitButton";
+import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
 export function Signup() {

@@ -11,7 +11,7 @@ import {
   FormControlError,
   FormControlErrorText,
 } from "@/components/ui/form-control";
-import { SubmitButton } from "@/src/shared/components/button/SubmitButton";
+import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
 export function Verify() {

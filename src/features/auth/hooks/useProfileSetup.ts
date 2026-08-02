@@ -6,9 +6,13 @@ export function useProfileSetup() {
   const { user } = useUser();
   const router = useRouter();
 
-  const [fullname, setFullname] = useState("");
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
+  const [fullname, setFullname] = useState(
+    (user?.unsafeMetadata?.fullname as string) || "",
+  );
+  const [age, setAge] = useState((user?.unsafeMetadata?.age as string) || "");
+  const [gender, setGender] = useState(
+    (user?.unsafeMetadata?.gender as string) || "",
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -29,8 +33,11 @@ export function useProfileSetup() {
         },
       });
 
-      // AuthGuard in _layout will automatically detect profile completion and redirect to /
-      router.replace("/");
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        router.replace("/account");
+      }
     } catch (err: any) {
       console.error(err);
       setErrorMsg(err.message || "Failed to save profile");

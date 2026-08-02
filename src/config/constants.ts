@@ -25,4 +25,9 @@ export const GENDER_OPTIONS = [
   { id: "other", label: "Other", icon: Users },
 ];
 
-export const AGE_OPTIONS = Array.from({ length: 60 }, (_, i) => (i + 18).toString());
+export const AGE_OPTIONS = Array.from({ length: 60 }, (_, i) =>
+  (i + 18).toString(),
+);
+
+export const FALLBACK_PROFILE_IMG_URL =
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop";
