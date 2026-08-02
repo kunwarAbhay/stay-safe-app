@@ -36,7 +36,7 @@ export default function Account() {
           label="Log Out"
           isLoading={isSigningOut}
           onPress={handleSignOut}
-          variant="destructive"
+          variant="outline"
         />
       </VStack>
     </ScreenLayout>
