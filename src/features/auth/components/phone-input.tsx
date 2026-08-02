@@ -16,10 +16,11 @@ import {
   SelectDragIndicatorWrapper,
   SelectDragIndicator,
   SelectItem,
+  SelectScrollView,
 } from "@/components/ui/select";
 import { ChevronDown } from "lucide-react-native";
 import { cn } from "@gluestack-ui/utils/nativewind-utils";
-import { COUNTRY_CODES } from "@/src/config/constants";
+import { COUNTRY_CODES, DEFAULT_COUNTRY_CODE } from "@/src/config/constants";
 
 export interface PhoneInputProps {
   countryCode: string;
@@ -40,6 +41,8 @@ export const PhoneInput = ({
   className,
   ...props
 }: PhoneInputProps & React.ComponentProps<typeof FormControl>) => {
+  const countryPlaceholder = `${DEFAULT_COUNTRY_CODE.flag} ${DEFAULT_COUNTRY_CODE.label}`;
+
   return (
     <FormControl
       isInvalid={Boolean(errorMsg)}
@@ -49,26 +52,28 @@ export const PhoneInput = ({
       <HStack space="sm">
         <Select selectedValue={countryCode} onValueChange={onCountryCodeChange}>
           <SelectTrigger
-            variant="outline"
+            variant="rounded"
             size="md"
-            className="justify-between px-3 min-w-23.75 border-outline-300 rounded-md"
+            className="justify-between px-3 w-min"
           >
-            <SelectInput placeholder="+91" />
+            <SelectInput placeholder={countryPlaceholder} />
             <SelectIcon className="mr-1" as={ChevronDown} />
           </SelectTrigger>
           <SelectPortal>
             <SelectBackdrop />
-            <SelectContent>
+            <SelectContent className="max-h-80">
               <SelectDragIndicatorWrapper>
                 <SelectDragIndicator />
               </SelectDragIndicatorWrapper>
-              {COUNTRY_CODES.map((c) => (
-                <SelectItem
-                  key={c.code}
-                  label={`${c.flag} ${c.label}`}
-                  value={c.code}
-                />
-              ))}
+              <SelectScrollView className="w-full">
+                {COUNTRY_CODES.map((c) => (
+                  <SelectItem
+                    key={c.code}
+                    label={`${c.flag} ${c.label}`}
+                    value={c.code}
+                  />
+                ))}
+              </SelectScrollView>
             </SelectContent>
           </SelectPortal>
         </Select>

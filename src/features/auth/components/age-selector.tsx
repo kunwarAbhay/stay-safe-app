@@ -10,6 +10,7 @@ import {
   SelectDragIndicatorWrapper,
   SelectDragIndicator,
   SelectItem,
+  SelectScrollView,
 } from "@/components/ui/select";
 import { AGE_OPTIONS } from "@/src/config/constants";
 
@@ -22,22 +23,24 @@ export const AgeSelector = ({ value, onChange, ...props }: AgeSelectProps) => {
   return (
     <Select onValueChange={onChange} selectedValue={value} {...props}>
       <SelectTrigger
-        variant="outline"
-        size="lg"
-        className="bg-white justify-between"
+        variant="rounded"
+        size="md"
+        className="px-3 justify-between"
       >
         <SelectInput placeholder={"Select Age"} />
-        <SelectIcon className="mr-3" as={ChevronDown} />
+        <SelectIcon className="mr-1" as={ChevronDown} />
       </SelectTrigger>
       <SelectPortal>
         <SelectBackdrop />
-        <SelectContent>
+        <SelectContent className="max-h-80">
           <SelectDragIndicatorWrapper>
             <SelectDragIndicator />
           </SelectDragIndicatorWrapper>
-          {AGE_OPTIONS.map((a) => (
-            <SelectItem key={a} label={a} value={a} />
-          ))}
+          <SelectScrollView className="w-full">
+            {AGE_OPTIONS.map((a) => (
+              <SelectItem key={a} label={a} value={a} />
+            ))}
+          </SelectScrollView>
         </SelectContent>
       </SelectPortal>
     </Select>

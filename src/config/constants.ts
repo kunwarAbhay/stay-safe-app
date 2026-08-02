@@ -6,7 +6,11 @@ export interface CountryCodeOption {
   flag: string;
 }
 
-export const DEFAULT_COUNTRY_CODE = "91";
+export const DEFAULT_COUNTRY_CODE: CountryCodeOption = {
+  code: "91",
+  label: "+91",
+  flag: "🇮🇳",
+};
 
 export const COUNTRY_CODES: CountryCodeOption[] = [
   { code: "91", label: "+91", flag: "🇮🇳" },

@@ -8,7 +8,7 @@ export const useSignup = () => {
   const { signUp, fetchStatus: signUpFetchStatus } = useSignUp();
   const router = useRouter();
 
-  const [countryCode, setCountryCode] = useState(DEFAULT_COUNTRY_CODE);
+  const [countryCode, setCountryCode] = useState(DEFAULT_COUNTRY_CODE.code);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
