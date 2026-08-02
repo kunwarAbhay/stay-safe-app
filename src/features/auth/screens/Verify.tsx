@@ -1,11 +1,9 @@
-import { useState } from "react";
-import { useSignIn, useSignUp } from "@clerk/expo";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, Link } from "expo-router";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
-import { Input, InputField } from "@/components/ui/input";
+import { Pressable } from "@/components/ui/pressable";
 import {
   FormControl,
   FormControlError,
@@ -13,64 +11,26 @@ import {
 } from "@/components/ui/form-control";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
+import { MessageSquare } from "lucide-react-native";
+import { OtpInput } from "@/src/features/auth/components/otp-input";
+import { ResendTimer } from "@/src/features/auth/components/resend-timer";
+import { useVerify } from "@/src/features/auth/hooks/use-verify";
+
 
 export default function Verify() {
-  const { signIn, fetchStatus: signInFetchStatus } = useSignIn();
-  const { signUp, fetchStatus: signUpFetchStatus } = useSignUp();
-  const router = useRouter();
-  const { phone, type } = useLocalSearchParams<{
-    phone: string;
+  const { fullPhoneNumber, type } = useLocalSearchParams<{
+    fullPhoneNumber: string;
     type: "login" | "signup";
   }>();
 
-  const [code, setCode] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-
-  const isFetching =
-    signInFetchStatus === "fetching" || signUpFetchStatus === "fetching";
-  const isSignUp = type === "signup";
-
-  const navigateAfterAuth = (options: any) => {
-    if (options.session?.currentTask) return;
-    router.replace("/");
-  };
-
-  const handleVerify = async () => {
-    setErrorMsg("");
-    if (code.length !== 6) {
-      setErrorMsg("Code must be 6 digits");
-      return;
-    }
-
-    try {
-      if (isSignUp) {
-        const { error } = await signUp!.verifications.verifyPhoneCode({ code });
-
-        if (error) {
-          setErrorMsg(error.longMessage || "Invalid verification code");
-          return;
-        }
-        if (signUp.status === "complete") {
-          await signUp.finalize({ navigate: navigateAfterAuth });
-        }
-      } else {
-        const { error } = await signIn!.phoneCode.verifyCode({ code });
-
-        if (error) {
-          setErrorMsg(error.longMessage || "Invalid verification code");
-          return;
-        }
-        if (signIn.status === "complete") {
-          await signIn.finalize({ navigate: navigateAfterAuth });
-        } else {
-          setErrorMsg(`Unexpected sign in status: ${signIn!.status}`);
-        }
-      }
-    } catch (err: any) {
-      console.error(err);
-      setErrorMsg("An unexpected error occurred.");
-    }
-  };
+  const {
+    code,
+    setCode,
+    errorMsg,
+    isFetching,
+    handleVerify,
+    handleResendCode,
+  } = useVerify(type, fullPhoneNumber);
 
   return (
     <ScreenLayout
@@ -80,39 +40,40 @@ export default function Verify() {
       className="px-6 justify-center"
     >
       <VStack space="xl">
-        <Box className="items-center mb-8">
-          <Heading size="3xl" className="text-center text-primary-500 mb-2">
-            Staysafe
-          </Heading>
-        </Box>
-
-        <VStack space="md" className="mb-4">
-          <Heading size="2xl">Enter Verification Code</Heading>
-          <Text size="md" className="text-typography-500">
-            We sent a 6-digit code to {phone || "your phone number"}.
+        <Box className="items-center mb-6 mt-12">
+          <Box className="w-20 h-20 rounded-full bg-primary items-center justify-center mb-6">
+            <MessageSquare color="white" size={32} />
+          </Box>
+          <Text className="text-primary font-bold mb-2 tracking-widest text-xs uppercase">
+            VERIFICATION
           </Text>
-        </VStack>
+          <Heading size="3xl" className="text-center text-typography-900 mb-4">
+            Enter OTP Code
+          </Heading>
+          <Text size="md" className="text-center text-typography-500 mb-2">
+            We've sent a 6-digit secure code to
+          </Text>
+          <Text size="md" className="text-center text-typography-900 font-bold">
+            {fullPhoneNumber}
+          </Text>
+        </Box>
 
         <FormControl
           isInvalid={Boolean(errorMsg)}
           isDisabled={isFetching}
-          className="w-full"
+          className="w-full mb-4"
         >
-          <Input className="bg-white">
-            <InputField
-              placeholder="Enter 6-digit code"
-              keyboardType="number-pad"
-              maxLength={6}
-              value={code}
-              onChangeText={setCode}
-            />
-          </Input>
-          <FormControlError className="mt-1">
-            <FormControlErrorText className="text-error-500 text-sm">
-              {errorMsg}
-            </FormControlErrorText>
-          </FormControlError>
+          <OtpInput code={code} setCode={setCode} isFetching={isFetching} />
+          {errorMsg ? (
+            <FormControlError className="mt-2 justify-center">
+              <FormControlErrorText className="text-error-500 text-sm text-center">
+                {errorMsg}
+              </FormControlErrorText>
+            </FormControlError>
+          ) : null}
         </FormControl>
+
+        <ResendTimer onResend={handleResendCode} />
 
         <SubmitButton
           label="Verify & Continue"
@@ -120,6 +81,17 @@ export default function Verify() {
           isDisabled={code.length !== 6}
           onPress={handleVerify}
         />
+
+        <VStack className="items-center mt-4">
+          <Text className="text-typography-500 mb-1">
+            Didn't receive the code?
+          </Text>
+          {/* <Link href="#" asChild> */}
+            <Pressable>
+              <Text className="text-primary font-bold">Get help</Text>
+            </Pressable>
+          {/* </Link> */}
+        </VStack>
       </VStack>
     </ScreenLayout>
   );
