@@ -59,7 +59,7 @@ export interface AgeSelectProps extends React.ComponentProps<typeof Select> {
   onChange: (age: string) => void;
 }
 
-export function AgeSelector({ value, onChange, ...props }: AgeSelectProps) {
+export const AgeSelector = ({ value, onChange, ...props }: AgeSelectProps) => {
   return (
     <Select onValueChange={onChange} selectedValue={value} {...props}>
       <SelectTrigger
@@ -101,7 +101,7 @@ export interface SubmitButtonProps extends React.ComponentProps<typeof Button> {
   children?: React.ReactNode;
 }
 
-export function SubmitButton({
+export const SubmitButton = ({
   children,
   label,
   isLoading = false,
@@ -109,7 +109,7 @@ export function SubmitButton({
   onPress,
   className,
   ...props
-}: SubmitButtonProps) {
+}: SubmitButtonProps) => {
   const disabled = isLoading || isDisabled;
   const content = children ?? label;
 

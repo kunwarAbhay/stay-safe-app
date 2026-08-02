@@ -32,18 +32,18 @@ app/(auth)/
 
 src/features/auth/
 ├── screens/
-│   ├── Login.tsx                    # Screen layout container
-│   ├── Signup.tsx                   # Screen layout container
-│   ├── Verify.tsx                   # Screen layout container
-│   └── Profile.tsx                  # Screen layout container
+│   ├── login.tsx                    # Screen layout container
+│   ├── signup.tsx                   # Screen layout container
+│   ├── verify.tsx                   # Screen layout container
+│   └── profile.tsx                  # Screen layout container
 ├── components/                      # Feature sub-components
-│   ├── PhoneInput.tsx
-│   ├── GenderSelector.tsx
-│   └── AgeSelector.tsx
+│   ├── phone-input.tsx
+│   ├── gender-selector.tsx
+│   └── age-selector.tsx
 ├── hooks/
-│   ├── useLogin.ts                  # Screen state & API side-effects
-│   ├── useSignup.ts
-│   └── useProfileSetup.ts
+│   ├── use-login.ts                  # Screen state & API side-effects
+│   ├── use-signup.ts
+│   └── use-profile-setup.ts
 └── types/
     └── auth.types.ts
 ```
@@ -74,7 +74,7 @@ import { GenderSelector } from "@/src/features/auth/components/GenderSelector";
 import { SubmitButton } from "@/src/shared/components/button/SubmitButton";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 
-export function Profile() {
+export default function Profile() {
   // 1. Delegate logic to feature hook
   const {
     fullname,
