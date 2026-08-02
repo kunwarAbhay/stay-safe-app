@@ -25,7 +25,7 @@ export const HomeHeader = ({
   const userImage = user?.imageUrl || FALLBACK_PROFILE_IMG_URL;
 
   const handleGoToAccount = () => {
-    router.push("/account/index");
+    router.push("/account");
   };
 
   return (
