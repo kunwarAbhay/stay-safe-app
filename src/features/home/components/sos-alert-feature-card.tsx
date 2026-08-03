@@ -20,7 +20,7 @@ export const SosAlertFeatureCard = ({
   return (
     <Box
       className={cn(
-        "flex-1 bg-white rounded-2xl p-4 shadow-sm items-start justify-between min-h-[100px]",
+        "flex-1 bg-white rounded-2xl p-4 shadow-sm items-start justify-between min-h-25",
         className,
       )}
     >

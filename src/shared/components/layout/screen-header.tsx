@@ -53,7 +53,7 @@ const ScreenHeaderLeft = ({
 }: ScreenHeaderLeftProps) => {
   return (
     <HStack
-      className={cn("items-center gap-3 flex-shrink-0", className)}
+      className={cn("items-center gap-3 shrink-0", className)}
       {...props}
     >
       {children}
@@ -117,7 +117,7 @@ const ScreenHeaderRight = ({
 }: ScreenHeaderRightProps) => {
   return (
     <HStack
-      className={cn("items-center gap-3 flex-shrink-0", className)}
+      className={cn("items-center gap-3 shrink-0", className)}
       {...props}
     >
       {children}
