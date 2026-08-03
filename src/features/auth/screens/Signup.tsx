@@ -73,21 +73,19 @@ export default function Signup() {
 
         <Checkbox
           value="agree"
-          // size="md"
-          className="mt-6 mb-4 items-center"
+          className="mt-6 mb-4 flex justify-center items-center"
           isChecked={isAgreed}
           onChange={setIsAgreed}
         >
-          <CheckboxIndicator className="mr-3 mt-1">
+          <CheckboxIndicator>
             <CheckboxIcon as={CheckIcon} />
           </CheckboxIndicator>
-          <HStack className="flex-wrap flex-1 ml-2 items-center">
+          <CheckboxLabel className="text-xs">
             <Text className="text-typography-500">I agree to the </Text>
             <Text className="text-primary font-bold">Terms of Service</Text>
             <Text className="text-typography-500"> and </Text>
             <Text className="text-primary font-bold">Privacy Policy</Text>
-            <Text className="text-typography-500">.</Text>
-          </HStack>
+          </CheckboxLabel>
         </Checkbox>
 
         <HStack className="justify-center mt-6" space="sm">
