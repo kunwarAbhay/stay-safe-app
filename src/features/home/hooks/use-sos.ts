@@ -1,25 +1,29 @@
-import { useState } from "react";
+import { create } from "zustand";
 
-export function useSOS() {
-  const [isSOSActive, setIsSOSActive] = useState(false);
-  const [sosInitiationTimestamp, setSosInitiationTimestamp] = useState<number | undefined>(undefined);
-
-  const handleActivateSOS = () => {
-    console.log("SOS activated — start sharing here");
-    setSosInitiationTimestamp(Date.now());
-    setIsSOSActive(true);
-  };
-
-  const handleEndSOS = () => {
-    console.log("SOS deactivated — stop sharing here");
-    setSosInitiationTimestamp(undefined);
-    setIsSOSActive(false);
-  };
-
-  return {
-    isSOSActive,
-    sosInitiationTimestamp,
-    handleActivateSOS,
-    handleEndSOS,
-  };
+export interface SOSState {
+  isSOSActive: boolean;
+  sosInitiationTimestamp?: number;
+  handleActivateSOS: () => void;
+  handleEndSOS: () => void;
 }
+
+export const useSOS = create<SOSState>((set) => ({
+  isSOSActive: false,
+  sosInitiationTimestamp: undefined,
+
+  handleActivateSOS: () => {
+    console.log("SOS activated — start sharing here");
+    set({
+      isSOSActive: true,
+      sosInitiationTimestamp: Date.now(),
+    });
+  },
+
+  handleEndSOS: () => {
+    console.log("SOS deactivated — stop sharing here");
+    set({
+      isSOSActive: false,
+      sosInitiationTimestamp: undefined,
+    });
+  },
+}));
