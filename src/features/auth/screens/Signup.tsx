@@ -10,14 +10,7 @@ import { PhoneInput } from "@/src/features/auth/components/phone-input";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
 import { Shield } from "lucide-react-native";
-import {
-  Checkbox,
-  CheckboxIndicator,
-  CheckboxIcon,
-  CheckboxLabel,
-} from "@/components/ui/checkbox";
-import { CheckIcon } from "@/components/ui/icon";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function Signup() {
   const {
@@ -71,22 +64,12 @@ export default function Signup() {
           onPress={handleContinue}
         />
 
-        <Checkbox
-          value="agree"
-          className="mt-6 mb-4 flex justify-center items-center"
-          isChecked={isAgreed}
-          onChange={setIsAgreed}
-        >
-          <CheckboxIndicator>
-            <CheckboxIcon as={CheckIcon} />
-          </CheckboxIndicator>
-          <CheckboxLabel className="text-xs">
-            <Text className="text-typography-500">I agree to the </Text>
-            <Text className="text-primary font-bold">Terms of Service</Text>
-            <Text className="text-typography-500"> and </Text>
-            <Text className="text-primary font-bold">Privacy Policy</Text>
-          </CheckboxLabel>
-        </Checkbox>
+        <Text className="text-typography-500 text-center">
+          <Text className="text-sm">By Continuing, you Agree to Our</Text>
+          <Text className="font-bold text-sm"> Terms of Service</Text>
+          <Text className="text-sm"> and</Text>
+          <Text className="font-bold text-sm"> Privacy Policy</Text>
+        </Text>
 
         <HStack className="justify-center mt-6" space="sm">
           <Text className="text-typography-500">Already have an account?</Text>
