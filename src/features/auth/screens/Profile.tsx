@@ -16,6 +16,7 @@ import { AgeSelector } from "@/src/features/auth/components/age-selector";
 import { GenderSelector } from "@/src/features/auth/components/gender-selector";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
+import { HStack } from "@/components/ui/hstack";
 
 export default function Profile() {
   const {
@@ -32,28 +33,18 @@ export default function Profile() {
   } = useProfileSetup();
 
   return (
-    <ScreenLayout
-      scrollable={true}
-      useKeyboardAvoiding
-      useSafeArea={false}
-      className="px-6 py-12"
-    >
+    <ScreenLayout scrollable={false} useKeyboardAvoiding className="px-6">
       <VStack className="flex-1" space="xl">
-        <Box className="items-center mb-6">
-          <UserCircle2
-            size={120}
-            className="text-primary-500"
-            strokeWidth={1}
-          />
-        </Box>
-
-        <VStack space="md" className="mb-4">
-          <Heading size="2xl">Tell Us About Yourself</Heading>
-          <Text size="md" className="text-typography-500">
-            Help us personalize your experience. You can always update this
-            later.
-          </Text>
-        </VStack>
+        <HStack space="md" className="gap-5 items-center">
+          <VStack space="xs" className="gap-1.5">
+            <Text className="font-bold text-foreground text-lg">
+              Tell Us About Yourself
+            </Text>
+            <Text className="text-foreground/60 text-xs">
+              Help us personalize your experience.
+            </Text>
+          </VStack>
+        </HStack>
 
         <FormControl isRequired isDisabled={isSaving} className="mb-2">
           <FormControlLabel>
@@ -61,7 +52,7 @@ export default function Profile() {
               Full Name
             </FormControlLabelText>
           </FormControlLabel>
-          <Input className="bg-white">
+          <Input>
             <InputField
               placeholder="Enter Your Full name"
               value={fullname}
