@@ -41,7 +41,9 @@ export const PhoneInput = ({
   className,
   ...props
 }: PhoneInputProps & React.ComponentProps<typeof FormControl>) => {
-  const countryPlaceholder = `${DEFAULT_COUNTRY_CODE.flag} ${DEFAULT_COUNTRY_CODE.label}`;
+  const selectedCountry =
+    COUNTRY_CODES.find((c) => c.code === countryCode) || DEFAULT_COUNTRY_CODE;
+  const selectedLabel = `${selectedCountry.flag} ${selectedCountry.label}`;
 
   return (
     <FormControl
@@ -54,9 +56,9 @@ export const PhoneInput = ({
           <SelectTrigger
             variant="rounded"
             size="md"
-            className="justify-between px-3 w-min"
+            className="justify-between px-3 w-28"
           >
-            <SelectInput placeholder={countryPlaceholder} />
+            <SelectInput value={selectedLabel} placeholder={selectedLabel} />
             <SelectIcon className="mr-1" as={ChevronDown} />
           </SelectTrigger>
           <SelectPortal>
