@@ -1,29 +1,21 @@
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
-import { BackButton } from "@/src/shared/components/button/back-button";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { useMarkAsSafe } from "@/src/features/home/hooks/use-mark-as-safe";
 import { MarkAsSafeIllustration } from "@/src/features/home/components/mark-as-safe-illustration";
+import { ScreenHeader } from "@/src/shared/components/layout/screen-header";
 
 export default function MarkAsSafe() {
   const { confirmMarkAsSafe, cancelMarkAsSafe, isSubmitting } = useMarkAsSafe();
 
   return (
-    <ScreenLayout
-      scrollable={false}
-      className="bg-emerald-50/40"
-    >
+    <ScreenLayout scrollable={false}>
       <VStack className="flex-1" space="2xl">
-        {/* Top Header */}
-        <HStack className="items-center">
-          <BackButton onPress={cancelMarkAsSafe} />
-        </HStack>
+        <ScreenHeader title="Mark As Safe" />
 
-        {/* Center Illustration & Content */}
-        <VStack className="flex-1 items-center justify-center -mt-6">
+        <VStack className="flex-1 items-center justify-center">
           <MarkAsSafeIllustration size={240} />
 
           <Heading
@@ -38,7 +30,6 @@ export default function MarkAsSafe() {
           </Text>
         </VStack>
 
-        {/* Action Buttons */}
         <VStack className="mt-auto" space="md">
           <SubmitButton
             variant="outline"

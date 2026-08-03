@@ -6,12 +6,15 @@ import {
   ContactFormHandle,
 } from "@/src/features/contacts/components/contact-form";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { EditContactHeader } from "@/src/features/contacts/components/edit-contact-header";
 import { VStack } from "@/components/ui/vstack";
 import { SaveContactButton } from "@/src/features/contacts/components/save-contact-button";
-import { useUpdateContact, useContacts } from "@/src/features/contacts/hooks/use-contacts";
+import {
+  useUpdateContact,
+  useContacts,
+} from "@/src/features/contacts/hooks/use-contacts";
 import { ContactPermission } from "@/src/features/contacts/types/contact";
 import { Text } from "@/components/ui/text";
+import { ScreenHeader } from "@/src/shared/components/layout/screen-header";
 
 export default function EditContact() {
   const router = useRouter();
@@ -87,7 +90,12 @@ export default function EditContact() {
     <ScreenLayout>
       <ScreenLayout.Content className="pb-28">
         <VStack space="xl">
-          <EditContactHeader />
+          <ScreenHeader
+            showBackButton
+            title="Edit Emergency Contact"
+            subtitle="Update contact details and safety preferences."
+          />
+
           {error && (
             <Text className="text-error text-center text-sm px-4">
               {error.message || "Failed to update contact."}

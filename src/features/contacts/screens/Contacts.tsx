@@ -12,7 +12,6 @@ import { Contact } from "@/src/features/contacts/types/contact";
 import { ContactFilterOption } from "@/src/features/contacts/types/contact-filter";
 import { CONTACT_FILTERS } from "@/src/features/contacts/constants/contact-filters";
 import { useContactFilters } from "@/src/features/contacts/hooks/use-contact-filters";
-import { ContactHeader } from "@/src/features/contacts/components/contact-header";
 import { AddContactButton } from "@/src/features/contacts/components/add-contact-button";
 import { useRouter } from "expo-router";
 import { FilterArray } from "@/src/features/contacts/utils/filter-contacts";
@@ -20,6 +19,7 @@ import { useContacts } from "@/src/features/contacts/hooks/use-contacts";
 import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
+import { ScreenHeader } from "@/src/shared/components/layout/screen-header";
 
 const DEFAULT_FILTERS: ContactFilterOption[] = [CONTACT_FILTERS.INNER_CIRCLE];
 
@@ -77,7 +77,10 @@ export default function Contacts() {
     <ScreenLayout>
       <ScreenLayout.Content isTabScreen>
         <VStack space="xl">
-          <ContactHeader />
+          <ScreenHeader
+            title="Emergency Contacts"
+            subtitle="Manage your trusted contacts for safety mode and SOS alerts"
+          />
 
           <VStack space="sm" className="w-full mb-4">
             <HStack className="w-full items-center gap-3">

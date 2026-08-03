@@ -6,12 +6,12 @@ import {
   ContactFormHandle,
 } from "@/src/features/contacts/components/contact-form";
 import { useRouter } from "expo-router";
-import { AddContactHeader } from "@/src/features/contacts/components/add-contact-header";
 import { VStack } from "@/components/ui/vstack";
 import { SaveContactButton } from "@/src/features/contacts/components/save-contact-button";
 import { useCreateContact } from "@/src/features/contacts/hooks/use-contacts";
 import { ContactPermission } from "@/src/features/contacts/types/contact";
 import { Text } from "@/components/ui/text";
+import { ScreenHeader } from "@/src/shared/components/layout/screen-header";
 
 export default function AddContact() {
   const router = useRouter();
@@ -65,7 +65,12 @@ export default function AddContact() {
     <ScreenLayout>
       <ScreenLayout.Content className="pb-28">
         <VStack space="xl">
-          <AddContactHeader />
+          <ScreenHeader
+            showBackButton
+            title="Add Emergency Contact"
+            subtitle="Fill in the details below to add a contact."
+          />
+
           {error && (
             <Text className="text-error text-center text-sm px-4">
               {error.message || "Failed to create contact."}

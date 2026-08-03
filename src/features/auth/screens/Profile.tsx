@@ -1,7 +1,4 @@
 import { VStack } from "@/components/ui/vstack";
-import { Box } from "@/components/ui/box";
-import { Text } from "@/components/ui/text";
-import { Heading } from "@/components/ui/heading";
 import { Input, InputField } from "@/components/ui/input";
 import {
   FormControl,
@@ -10,15 +7,16 @@ import {
   FormControlError,
   FormControlErrorText,
 } from "@/components/ui/form-control";
-import { UserCircle2 } from "lucide-react-native";
 import { useProfileSetup } from "@/src/features/auth/hooks/use-profile-setup";
 import { AgeSelector } from "@/src/features/auth/components/age-selector";
 import { GenderSelector } from "@/src/features/auth/components/gender-selector";
 import { SubmitButton } from "@/src/shared/components/button/submit-button";
 import { ScreenLayout } from "@/src/shared/components/layout/screen-layout";
-import { HStack } from "@/components/ui/hstack";
+import { ScreenHeader } from "@/src/shared/components/layout/screen-header";
+import { useRouter } from "expo-router";
 
 export default function Profile() {
+  const router = useRouter();
   const {
     fullname,
     setFullname,
@@ -35,16 +33,11 @@ export default function Profile() {
   return (
     <ScreenLayout scrollable={false} useKeyboardAvoiding className="px-6">
       <VStack className="flex-1" space="xl">
-        <HStack space="md" className="gap-5 items-center">
-          <VStack space="xs" className="gap-1.5">
-            <Text className="font-bold text-foreground text-lg">
-              Tell Us About Yourself
-            </Text>
-            <Text className="text-foreground/60 text-xs">
-              Help us personalize your experience.
-            </Text>
-          </VStack>
-        </HStack>
+        <ScreenHeader
+          showBackButton={router.canGoBack()}
+          title="Tell Us About Yourself"
+          subtitle="Help us personalize your experience"
+        />
 
         <FormControl isRequired isDisabled={isSaving} className="mb-2">
           <FormControlLabel>
