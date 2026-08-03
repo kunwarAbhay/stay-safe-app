@@ -38,7 +38,7 @@ export const ResendTimer = ({
     return (
       <HStack className="justify-center items-center mt-6" space="sm">
         <Pressable onPress={handleResend}>
-          <Text className="text-primary-600 font-bold text-sm">
+          <Text className="text-primary font-bold text-sm underline">
             Resend Code
           </Text>
         </Pressable>
