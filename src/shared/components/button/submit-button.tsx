@@ -25,7 +25,7 @@ export function SubmitButton({
   return (
     <Button
       size="lg"
-      className={cn("rounded-full mt-4", className)}
+      className={cn("rounded-full", className)}
       onPress={onPress}
       disabled={disabled}
       {...props}

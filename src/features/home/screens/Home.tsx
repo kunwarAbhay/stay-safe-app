@@ -6,14 +6,11 @@ import { NoActiveAlertInfoCard } from "@/src/features/home/components/no-active-
 import { HomeHeader } from "@/src/features/home/components/home-header";
 import SOSWidget from "@/src/features/home/components/sos-widget";
 import { useSOS } from "@/src/features/home/hooks/use-sos";
+import { useRouter } from "expo-router";
 
 export default function Home() {
-  const {
-    isSOSActive,
-    sosInitiationTimestamp,
-    handleActivateSOS,
-    handleEndSOS,
-  } = useSOS();
+  const router = useRouter();
+  const { isSOSActive, sosInitiationTimestamp } = useSOS();
 
   return (
     <ScreenLayout isTabScreen>
@@ -22,8 +19,8 @@ export default function Home() {
         <SOSWidget
           isActive={isSOSActive}
           sosInitiationTimestamp={sosInitiationTimestamp}
-          onActivate={handleActivateSOS}
-          onEnd={handleEndSOS}
+          onActivate={() => router.push("/confirm-sos")}
+          onEnd={() => router.push("/mark-as-safe")}
         />
         <SafetyModeWidget />
         <PeopleSharingWidget />

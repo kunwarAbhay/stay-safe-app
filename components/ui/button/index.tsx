@@ -36,6 +36,8 @@ const buttonStyle = tva({
         'bg-secondary text-secondary-foreground data-[hover=true]:bg-secondary/80 data-[active=true]:bg-secondary/80',
       ghost: 'data-[hover=true]:bg-accent data-[active=true]:bg-accent dark:data-[hover=true]:bg-accent/50 dark:data-[active=true]:bg-accent/50',
       link: 'text-primary underline-offset-4 data-[hover=true]:underline data-[active=true]:underline',
+      success:
+        'bg-success data-[hover=true]:bg-success/90 data-[active=true]:bg-success/90 focus-visible:ring-success/20 dark:bg-success',
     },
     size: {
       default: 'px-4 py-2',
@@ -55,6 +57,7 @@ const buttonTextStyle = tva({
       secondary: 'text-secondary-foreground',
       ghost: 'text-foreground ',
       link: 'text-primary data-[hover=true]:underline data-[active=true]:underline',
+      success: 'text-white',
     },
     size: {
       default: 'text-sm',
@@ -75,6 +78,7 @@ const buttonSpinnerStyle = tva({
       secondary: 'text-secondary-foreground',
       ghost: 'text-foreground',
       link: 'text-primary',
+      success: 'text-white',
     },
     size: {
       default: 'h-4 w-4',
@@ -97,6 +101,7 @@ const buttonIconStyle = tva({
       ghost:
         'text-foreground data-[hover=true]:text-accent-foreground data-[active=true]:text-accent-foreground',
       link: 'text-primary',
+      success: 'text-white',
     },
     size: {
       default: 'h-4 w-4',

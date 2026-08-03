@@ -38,3 +38,4 @@ export const FALLBACK_PROFILE_IMG_URL =
 
 export const OTP_LENGTH = 6;  
 export const RESEND_TIMER_SECONDS = 30
+export const SOS_COUNTDOWN_IN_SECONDS=10;
